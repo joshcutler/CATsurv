@@ -1,4 +1,24 @@
+setwd("/Users/jacobmontgomery/GitHub/CATSurv/CalibrationMay2012/")
+source("../CATSurv.R")
+library("multicore")
+library("foreach")
+library("doMC")
+library("plyr")
+library("compiler")
 
+
+## Read in data/set up item bank
+  itemParams <- read.csv(file="ItemParams.csv", header=TRUE, as.is=TRUE, row.names=1)
+  nItems <- nrow(itemParams)
+  guessing <- rep(0, nItems)
+  questions <- data.frame(difficulty=itemParams$difficulty, discrimination=itemParams$discrimination,
+                          guessing=guessing,
+                          answers=c(NA))
+  cat <- new("CATsurv", questions=questions, priorParams=c(0, 1.75))
+  evalItems <- nextItem(cat)$all.estimates
+  evalItems <- evalItems[order(evalItems$difficulty),]
+  with(evalItems, plot(difficulty, epv, type="b"))
+  
 
 drawEPV = function (theta.hat=1, 
                     prior.dist="norm",
