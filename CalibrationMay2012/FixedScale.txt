@@ -1,0 +1,27 @@
+
+3-Item scale:
+1650:  Who is the Chief Justice of the U.S. Supreme Court?
+-0.17
+1605: The ability of a minority of senators to prevent a vote on a bill is known as
+-.68
+1610: The head of the Department of Justice is
+0.52
+
+5-item Scale:
+
+1617: Who is the current president of Mexico?
+1.13
+1600: <i>Roe v Wade</i> is a case decided by the Supreme Court that relates to]
+-1.17
+
+7-item scale:
+1616: The Byrd Rule is relevant
+2.73
+1590: Who is the Vice President of the United States?
+-2.34
+
+9-Item scale:
+1649:  Who is the Prime Minister of the United Kingdom?
+0.19
+1608 Who is the Speaker of the House of Representatives?
+-.33
