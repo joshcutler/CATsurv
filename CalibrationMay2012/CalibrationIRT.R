@@ -97,7 +97,8 @@ ltm.output[,1] <- ltm.res$coefficients[,1]/(-1*ltm.res$coefficients[,2])
 # look at lowest performing items
 ltm.output[ltm.output[,2]<.6,]
 
-
+library(xtable)
+(ltm.output[order(ltm.output[,"difficulty"]),])[32,]
 # output
 write.csv(ltm.output, file="ItemParams.csv", row.names=TRUE)              
               
