@@ -1,0 +1,140 @@
+CAT Questions:
+1804: Which of these political parties is considered most conservative?
+1805: Near the end of an election campaign, a poll shows that an issue that no candidate has mentioned is of great concern to voters. What is most likely to happen?
+1806: The President of the Senate is
+1807: Liberals are generally said to
+1808: Conservatives are generally said to
+1809: Which of these regions of the country is generally considered to be most supportive of Republican candidates
+1810: Which party is generally more supportive of increasing taxes on higher income people
+to reduce the federal budget deficit?
+1811: Which party is generally more supportive of restricting access to abortion?
+1812: The EPA is part of the national government primarily responsible for regulating
+1813: The U.S. Senate
+1814: Whose responsibility is it to nominate judges to the Federal Courts
+1815: Compared to 30 years ago, is the difference in incomes between the top 20% of households and the bottom 20% of households now bigger, smaller, or the same?
+1816: Which of these countries is NOT a permanent member of the U.N. Security Council
+1817: How many Justices typically serve on the U.S. Supreme Court
+1818: The House of Representatives has how many voting members?
+1819: What job or political office is now held by Ben Bernanke?
+1820: <i>Citizens United v the FEC</i> is a case decided by the Supreme Court that relates to
+1821: Who is the Vice President of the United States?
+1822: Who is the Speaker of the House of Representatives?
+1823: How many times can an individual be elected President of the United States under current laws?
+1824: In what month do we vote for President?
+1825: Is the U.S. federal budget deficit, the amount by which the governments spending exceeds the amount of money it collects, now bigger, about the same, or smaller than it was during most of the 1990s?
+1826: On which of the following federal programs is the <b>most</b> money spent each year?
+1827: Which party has a majority of seats in the U.S. House of Representatives?
+1828: What is Medicare?
+1829: Which party has a majority of seats in the U.S. Senate?
+1830: On which of the following does the U.S. federal government spend the <b>least</b> money?
+1831: What do all constitutional governments have?
+1832: On which of the following does the U.S. federal government spend the <b>most</b> money
+each year?
+1833: Who is the Prime Minister of the United Kingdom?
+1834: Who is the Chief Justice of the U.S. Supreme Court?
+1835: Which of the following actions does the United States federal government commonly take to finance a budget deficit?
+1836: Please answer each of the questions below honestly and to the best of your ability. Do not consult outside resources or other people when answering these questions. You will only be given 45 seconds to record your response.
+1837: How many votes are required in Congress to override a presidential veto?
+1838: The presiding officer in the House of Representatives is
+1839: For how many years is a United States Senator elected – that is, how many years are there in one full term of office for a U.S. Senator?
+1840: <i>Roe v Wade</i> is a case decided by the Supreme Court that relates to
+1841: The NRA is an organization that advocates for
+1842: The president may NOT
+1843: What do we call the first ten amendments to the Constitution?
+1844: Who signs bills to become laws?
+1845: The ability of a minority of senators to prevent a vote on a bill is known as
+1846: Social Security is
+1847: The First Amendment to the United States Constitution guarantees all of these rights EXCEPT
+1848: The Secretary of State
+1849: The federal debt is
+1850: The head of the Department of Justice is
+1851: What state holds the first <i>primary</i> election in Presidential primaries?
+1852: The Majority Leader of the House of Representative is
+1853: Which of <i>the states listed below</i> has the greatest number electoral college votes in U.S. Presidential Elections?
+1854: Common Cause is an organization that advocates for
+1855: The President of Afghanistan is named
+1856: The Byrd Rule is relevant
+1857: Who is the current president of Mexico?
+1858: Most cases are considered by the Supreme Court
+1859: Who is the Commander in Chief of the military?
+1860: Which party is generally more supportive of reducing the size of the defense budget?
+1861: How many senators are elected from each state?
+1862: Which party is generally more supportive of creating a way for immigrants who are in the U.S. illegally to eventually become citizens?
+1863: The FDA is part of the national government primarily responsible for regulating
+1864: What are the two parts of the U.S. Congress?
+1865: How long is one term for the President of the United States?
+1866: Which party is generally more supportive of allowing drilling for oil in the Arctic National Wildlife Refuge?
+1867: Which party is generally more supportive of reducing the size and scope of the federal government?
+1868: Which of these is NOT primarily the responsibility of the Federal government in Washington?
+
+
+Fixed Questions:
+1708: Which of these countries is NOT a permanent member of the U.N. Security Council
+1709: The House of Representatives has how many voting members?
+1710: How many Justices typically serve on the U.S. Supreme Court
+1712: What job or political office is now held by Ben Bernanke?
+1713: Which of these political parties is considered most conservative?
+1714: Who is the Vice President of the United States?
+1715: Who is the Speaker of the House of Representatives?
+1716: How many times can an individual be elected President of the United States under current laws?
+1717: In what month do we vote for President?
+1718: How many votes are required in Congress to override a presidential veto?
+1719: The presiding officer in the House of Representatives is
+1720: Near the end of an election campaign, a poll shows that an issue that no candidate has mentioned is of great concern to voters. What is most likely to happen?
+1721: The President of the Senate is
+1722: For how many years is a United States Senator elected – that is, how many years are there in one full term of office for a U.S. Senator?
+1723: <i>Roe v Wade</i> is a case decided by the Supreme Court that relates to
+1724: The NRA is an organization that advocates for
+1725: The president may NOT
+1726: What do we call the first ten amendments to the Constitution?
+1727: Who signs bills to become laws?
+1728: The ability of a minority of senators to prevent a vote on a bill is known as
+1729: Social Security is
+1730: The First Amendment to the United States Constitution guarantees all of these rights EXCEPT
+1731: The Secretary of State
+1732: The federal debt is
+1733: The head of the Department of Justice is
+1734: What state holds the first <i>primary</i> election in Presidential primaries?
+1735: The Majority Leader of the House of Representative is
+1736: Which of <i>the states listed below</i> has the greatest number electoral college votes in U.S. Presidential Elections?
+1737: Common Cause is an organization that advocates for
+1738: The President of Afghanistan is named
+1739: The Byrd Rule is relevant
+1740: Who is the current president of Mexico?
+1741: Most cases are considered by the Supreme Court
+1742: Who is the Commander in Chief of the military?
+1743: Which party is generally more supportive of reducing the size of the defense budget?
+1744: How many senators are elected from each state?
+1746: The FDA is part of the national government primarily responsible for regulating
+1747: What are the two parts of the U.S. Congress?
+1748: How long is one term for the President of the United States?
+1749: Which party is generally more supportive of allowing drilling for oil in the Arctic National Wildlife Refuge?
+1750: Which party is generally more supportive of reducing the size and scope of the federal government?
+1751: Which of these is NOT primarily the responsibility of the Federal government in Washington?
+1752: Liberals are generally said to
+1753: Conservatives are generally said to
+1755: <i>Citizens United v the FEC</i> is a case decided by the Supreme Court that relates to
+1756: Which party is generally more supportive of creating a way for immigrants who are in the U.S. illegally to eventually become citizens?
+1757: Which of these regions of the country is generally considered to be most supportive of Republican candidates
+1758: Which party is generally more supportive of increasing taxes on higher income people
+to reduce the federal budget deficit?
+1759: Which party is generally more supportive of restricting access to abortion?
+1760: The EPA is part of the national government primarily responsible for regulating
+1761: The U.S. Senate
+1762: Whose responsibility is it to nominate judges to the Federal Courts
+1763: Compared to 30 years ago, is the difference in incomes between the top 20% of households and the bottom 20% of households now bigger, smaller, or the same?
+1764: Which party has a majority of seats in the U.S. House of Representatives?
+1765: What is Medicare?
+1766: Which party has a majority of seats in the U.S. Senate?
+1767: On which of the following does the U.S. federal government spend the <b>least</b> money?
+1768: What do all constitutional governments have?
+1769: Who is the Prime Minister of the United Kingdom?
+1770: Who is the Chief Justice of the U.S. Supreme Court?
+1771: Which of the following actions does the United States federal government commonly take to finance a budget deficit?
+1772: Is the U.S. federal budget deficit, the amount by which the governments spending exceeds the amount of money it collects, now bigger, about the same, or smaller than it was during most of the 1990s?
+1773: Please answer each of the questions below honestly and to the best of your ability. Do not consult outside resources or other people when answering these questions. You will only be given 45 seconds to record your response.
+1774: On which of the following federal programs is the <b>most</b> money spent each year?
+1775: On which of the following does the U.S. federal government spend the <b>most</b> money
+each year?
+
+
