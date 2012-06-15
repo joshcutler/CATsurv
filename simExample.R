@@ -1,4 +1,4 @@
-setwd("/users/jmontgomery/Github/CATsurv/")
+setwd("~/Github/CATsurv/")
 
 ##Use the new library
 source("./CATSurv.R")
@@ -90,6 +90,7 @@ sim.dynamic.run <- function(questions,
 }
 ## Run the dynamic battery
 
+CAT.prior <- c(0, 1.75)
 forDyn <- matrix(NA, nrow=5, ncol=4)
 for (i in 1:5){
   forDyn[i,] <- unlist(sim.dynamic.run(questions, theta.true, CAT.prior, n.questions=i))
@@ -148,7 +149,7 @@ my.line.plotter <- function(item.num, it.obj){
   rect(-6, -0.15, -4.5, 1.15, col="gray80", lty=1, lwd=2)
 }
 
-pdf(file="/Users/jmontgomery/dropbox/Adaptive Surveys/TexFiles/ExDyn.pdf", width=5, height=6)
+pdf(file="~/dropbox/Adaptive Surveys/TexFiles/ExDyn.pdf", width=5, height=6)
 ## Make dynamic battery plot
 par(bg="white", mgp=c(1,0,0), tcl=0, mar=c(0,0,0,0), xaxt="n", yaxt="n", bty="o")
 layout(matrix(1:10, nrow=5, ncol=2), width=c(2,2))
@@ -175,7 +176,7 @@ dev.off()
 
 
 # Fixed battery plot
-pdf(file="/Users/jmontgomery/dropbox/Adaptive Surveys/TexFiles/ExFixed.pdf", width=5, height=6)
+pdf(file="~/dropbox/Adaptive Surveys/TexFiles/ExFixed.pdf", width=5, height=6)
 par(bg="white", mgp=c(1,0,0), tcl=0, mar=c(0,0,0,0), xaxt="n", yaxt="n", bty="o")
 layout(matrix(1:10, nrow=5, ncol=2), width=c(2,2))
 x <- seq(-5,4, length.out=500)
@@ -224,7 +225,7 @@ mepv.plotter <- function(answers, make.plot=TRUE){
 }
 
 
-pdf(file="/Users/jmontgomery/dropbox/Adaptive Surveys/TexFiles/EPVExample.pdf")
+pdf(file="~/dropbox/Adaptive Surveys/TexFiles/EPVExample.pdf")
 par(mfrow=c(2,2),  mgp=c(1,0,0), tcl=0, mar=c(3,2,2,2))
 answers <- rep(NA, 60)
 for (i in 1:4){
