@@ -1,11 +1,15 @@
 #Use the new library
-source("./CATSurv.R")
+setwd("~/GitHub/CatSurv/")
+source("CATSurv.R")
 library("multicore")
 library("foreach")
 library("doMC")
 library("plyr")
 library("compiler")
 
+#results10 <- sim.run(items=60, recipients=1000, fixed.scale=seq(3, 57, by=6), n.cores=24)
+
+seq(3, 57, by=6)
 
 ###
 #' Simulation Run
@@ -127,33 +131,6 @@ sim.dynamic.run <- function(questions,
 
 
 
-###
-#' Plotter function for simulations
-sim.plot <- function(sim.results,
-                     y.name="bias",
-                     y.min=0,
-                     y.max=10,
-                     y.lab="MSE",
-                     this.title="N=3")
-{
-  fixed = sim.results$fixed.results
-  dynamic = sim.results$dynamic.results
-  plot(NULL, xlim=c(-3.1,3.1), ylim=c(y.min, y.max), ylab=y.lab, xlab=expression(paste("True values of ", theta))  )
-  points(fixed$theta.true, sim.results[[paste('fixed.', y.name, sep='')]], col="pink", pch=23, cex=.5)
-  points(dynamic$theta.true, sim.results[[paste('dynamic.', y.name, sep='')]], col="skyblue", pch=24, cex=.5)
-  col.coder = abs(sim.results[[paste('fixed.', y.name, sep='')]]) > abs(sim.results[[paste('dynamic.', y.name, sep='')]])
-  colors = rep("pink", length(fixed$theta.true))
-  colors[col.coder] = "skyblue"
-  points(fixed$theta.true, predict(loess(sim.results[[paste('fixed.', y.name, sep='')]] ~ fixed$theta.true, span=.5, degree=1)), type="l", lwd=2, col="red")
-  points(dynamic$theta.true, predict(loess(sim.results[[paste('dynamic.', y.name, sep='')]] ~ dynamic$theta.true, span=.5, degree=1)), type="l", lwd=2, col="blue", lty=2)
-  rect(-3.35, y.max-.075, 3.35, y.max+100, col="gray80", lwd=1)
-  text(0, y.max, this.title, cex=1.25)
-}
-
-system.time(results5 <- sim.run(items=60, recipients=1000, fixed.scale=seq(from=10,to=50, length.out=5), n.cores=32))
-sim.plot(results5, "bias", y.min=-0.5, y.max=0.5)
-sim.plot(results5, "mse", y.min=0, y.max=1)
-save(results5, file="results5")
 
 
 
@@ -167,7 +144,36 @@ load("results5")
 load("results3")
 load("results7")
 load("results9")
+load("results10")
 
+
+
+###
+#' Plotter function for simulations
+sim.plot <- function(sim.results,
+                     y.name="bias",
+                     y.min=0,
+                     y.max=10,
+                     y.lab="Squared error",
+                     this.title="N=3")
+{
+  fixed = sim.results$fixed.results
+  dynamic = sim.results$dynamic.results
+  plot(NULL, xlim=c(-3.1,3.1), ylim=c(y.min, y.max), ylab=y.lab, xlab=expression(paste("True values of ", theta))  )
+  points(fixed$theta.true, sim.results[[paste('fixed.', y.name, sep='')]], col="black", pch=18, cex=.6)
+  points(dynamic$theta.true, sim.results[[paste('dynamic.', y.name, sep='')]], col="gray60", pch=18, cex=.6)
+  col.coder = abs(sim.results[[paste('fixed.', y.name, sep='')]]) > abs(sim.results[[paste('dynamic.', y.name, sep='')]])
+  colors = rep("pink", length(fixed$theta.true))
+  colors[col.coder] = "skyblue"
+#  points(fixed$theta.true, predict(loess(sim.results[[paste('fixed.', y.name, sep='')]] ~ fixed$theta.true, span=.5, degree=1)), type="l", lwd=2, col="red")
+#  points(dynamic$theta.true, predict(loess(sim.results[[paste('dynamic.', y.name, sep='')]] ~ dynamic$theta.true, span=.5, degree=1)), type="l", lwd=2, col="blue", lty=2)
+  rect(-3.35, y.max-.075, 3.35, y.max+100, col="gray80", lwd=1)
+  text(0, y.max, this.title, cex=1.25)
+}
+#system.time(results5 <- sim.run(items=60, recipients=1000, fixed.scale=seq(from=10,to=50, length.out=5), n.cores=32))
+#sim.plot(results5, "bias", y.min=-0.5, y.max=0.5)
+#sim.plot(results5, "mse", y.min=0, y.max=1)
+#save(results5, file="results5")
 pdf(file="/Users/jmontgomery/dropbox/Adaptive Surveys/TexFiles/MSE4.pdf", width=6, height=6)
 par(bg="white", mgp=c(1,0,0), tcl=0, mar=c(0,2,2.1,0), xaxt="n", yaxt="s", bty="o")
 layout(matrix(1:6, nrow=3, ncol=2), height=c(3,3,1.3))
@@ -176,9 +182,9 @@ par(mar=c(2.1,2,0,0), xaxt="s")
 sim.plot(results7, "mse", y.min=0, y.max=1.6, this.title="N=7")
 par(bty="n", xaxt="n", yaxt="n", mar=c(0,0,0,0), mgp=c(0,0,0))
 plot(NULL, xlim=c(0,1), ylim=c(0,1),  ylab="", xlab="")
-legend(.5,.9, c("Static scale est.", "CAT scale est.", "Loess for static", "Loess for CAT"), pch=c(23,24, 26, 26), col=c("pink", "skyblue", "red", "blue"),  lty=c(0,0,1,2), lwd=c(1,1,2,2), cex=1.3)
+legend(.5,.9, c("Static scale est.", "CAT scale est."), col=c("black", "gray60"),  lty=c(1,1), lwd=c(1.9, 1.9), cex=1.1)
 par(mar=c(0,0,2.1,2), xaxt="n", yaxt="n", bty="o")
 sim.plot(results5, "mse", y.min=0, y.max=1.6, this.title="N=5")
 par(mar=c(2.1,0,0,2), xaxt="s", mgp=c(1,0,0))
-sim.plot(results9, "mse", y.min=0, y.max=1.6, this.title="N=9")
+sim.plot(results10, "mse", y.min=0, y.max=1.6, this.title="N=10")
 dev.off()

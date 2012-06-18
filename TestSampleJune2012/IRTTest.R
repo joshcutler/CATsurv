@@ -153,7 +153,7 @@ statRes10 <- testResults(rows=rownames(staticResultsRaw), .n=10)
 
 
 
-results.plotter <- function(y.min=0, y.max=2.5, y.lab="MSE", xlab=expression(paste("True values of ", theta)),
+results.plotter <- function(y.min=0, y.max=2.5, y.lab="Squared error", xlab=expression(paste("True values of ", theta)),
                            dyn.obj = dynRes3,static.obj = statRes3, this.title="N=3"){
   dyn.obj=dyn.obj[order(dyn.obj$theta.true),]
   static.obj=static.obj[order(static.obj$theta.true),]
@@ -295,11 +295,11 @@ statB <- (c(statB,median(abs(statRes10$theta.est-statRes3$theta.true))))
 
 pdf(file="~/Dropbox/Adaptive Surveys/TexFiles/Comparison.pdf", width=6.5, height=4)
 par(bg="white", mgp=c(1,0,0), tcl=0, mar=c(2.1,2,2.1,1), xaxt="s", yaxt="s", bty="o", mfrow=c(1,2))
-plot(3:10, dyn, pch=24, col="blue", type="b", xlab="Number of questions", ylab="Median MSE", ylim=c(0.2, .62), main="MSE by Scale Length", lty=2)
+plot(3:10, dyn, pch=24, col="blue", type="b", xlab="Number of questions", ylab="Median squared error", ylim=c(0.2, .62), main="MSE by Scale Length", lty=2)
 points(3:10, stat, pch=23, col="red", type="b")
 #abline(h=stat, col="pink")
 legend(7,.62, c("Static scale", "CAT scale"), pch=c(23,24), col=c("red", "blue"),  lty=c(1,2), cex=.75)
-plot(3:10, dynB, pch=24, col="blue", type="b", xlab="Number of questions", ylab="Median Deviation", ylim=c(0.21, .4), main="Deviation by Scale Length", lty=2) #
+plot(3:10, dynB, pch=24, col="blue", type="b", xlab="Number of questions", ylab="Median absolute deviation", ylim=c(0.21, .4), main="MAD by Scale Length", lty=2) #
 points(3:10, statB, pch=23, col="red", type="b")
 #abline(h=statB, col="pink")
 legend(7,.4, c("Static scale", "CAT scale"), pch=c(23,24), col=c("red", "blue"),  lty=c(1,2), cex=.75)
