@@ -8,7 +8,7 @@ setClass(class.name,
            priorParams="numeric"
            ),
          prototype=prototype(
-           priorName="norm",
+           priorName="normal",
            priorParams=c(1,1)
            )
          )
@@ -48,8 +48,11 @@ setMethod(f="likelihood", signature=class.name, definition=function(cat, theta, 
 setGeneric("prior", function(cat, values, name, params){standardGeneric("prior")})
 setMethod(f="prior", signature=class.name, definition=function(cat, values, name, params) {
   prior.value = switch(name, 
-                       norm = dnorm(values, params[1], params[2])
+                       normal = dnorm(values, params[1], params[2]),
+                       cauchy = dcauchy(values, params[1], params[2]),
+                       t = dt(values, params[1], params[2])
                        )
+  return(prior.value)
 })
 
 setGeneric("estimateTheta", function(cat, D=1, lowerBound=-4, upperBound=4, quadPoints=33, ...){standardGeneric("estimateTheta")})
@@ -141,23 +144,3 @@ setMethod(f="debugNextItem", signature=class.name, definition=function(cat, thet
   
   return(next.item)
 })         
-
-# Example to use this
-# questions = data.frame(difficulty=seq(-3,3,by=.1), discrimination=c(1), guessing=c(0), answers=c(NA))
-# cat = new("CATsurv", questions=questions, priorParams=c(0,1.75))
-# theta.est = estimateTheta(cat)
-# expectedPV(cat, 30, theta.est)
-# 
-# next.item = debugNextItem(cat, theta.est)
-# cat = storeAnswer(cat, next.item$next.item, 0)
-# next.item = debugNextItem(cat)
-# cat = storeAnswer(cat, next.item$next.item, 0)
-# next.item = debugNextItem(cat)
-# cat = storeAnswer(cat, next.item$next.item, 0)
-# next.item = debugNextItem(cat)
-# cat = storeAnswer(cat, next.item$next.item, 0)
-# next.item = debugNextItem(cat)
-# cat = storeAnswer(cat, next.item$next.item, 0)
-# next.item = debugNextItem(cat)
-# cat = storeAnswer(cat, next.item$next.item, 0)
-# next.item = debugNextItem(cat)
