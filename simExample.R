@@ -175,6 +175,42 @@ box(which="outer", lwd=2)
 dev.off()
 
 
+my.line.plotter2 <- function(item.num, it.obj){
+  plot(NULL, xlim=c(-5,3.7), ylim=c(-0.1,1.1), xlab="", ylab="")
+  abline(h=c(0,1), col="gray", lwd=2)
+  lines(x,my.curve(x=x, it.num=item.num, it.obj=it.obj), type="l", lwd=2)
+  segments(theta.true,0,theta.true,1, lty=2)
+  text(theta.true,1.06, expression(theta), cex=1)
+  abline(h=.5, lty=3, col="gray")
+  text(2,1.065, expression(paste("Pr(", y[ij], "=1", "|", theta, ")=1")))
+  text(2,.07, expression(paste("Pr(", y[ij], "=1", "|", theta, ")=0")))
+  text(seq(-4,3,by=1), -.06, seq(-4,3,by=1), cex=.9, col="gray20")
+  rect(-6, -0.15, -4.5, 1.15, col="gray80", lty=1, lwd=2)
+}
+
+
+for (i in 1:5){
+pdf(file=paste("~/dropbox/Adaptive Surveys/TexFiles/ExDynSlides", i, ".pdf", sep=""), width=5, height=3)
+par(bg="white", mgp=c(1,0,0), tcl=0, mar=c(0,0,0,0), xaxt="n", yaxt="n", bty="o")
+layout(matrix(1:10, nrow=1, ncol=2), width=c(2,2))
+my.line.plotter2(i, it.obj=forDyn)
+    par(srt=90)
+    text(-4.95,.5, paste("Item", i), cex=1)
+    par(srt=0)
+  plot(x, post.plotter(x=x, item.nums=1:i, it.obj=forDyn), type="l", xlim=c(-5, 3.7), ylim=c(-.1, 1.1))
+  abline(h=c(0,1), col="gray", lwd=2)
+  segments(theta.true,0,theta.true,1, lty=2)
+  text(theta.true,1.06, expression(theta), cex=1)
+  text(seq(-4,3,by=1), -.06, seq(-4,3,by=1), cex=.9, col="gray20")
+    rect(-6, -0.15, -4.5, 1.15, col="gray80", lty=1, lwd=2)
+  par(srt=90)
+    text(-4.95, .5, expression(paste("p(", theta, "|", bold(y), ")")), cex=1)
+  par(srt=0)
+dev.off()
+}
+
+
+
 # Fixed battery plot
 pdf(file="~/dropbox/Adaptive Surveys/TexFiles/ExFixed.pdf", width=5, height=6)
 par(bg="white", mgp=c(1,0,0), tcl=0, mar=c(0,0,0,0), xaxt="n", yaxt="n", bty="o")
@@ -197,7 +233,29 @@ for (i in 1:5){
     text(-4.95, .5, expression(paste("p(", theta, "|", bold(y), ")")), cex=1.4)
   par(srt=0)
 }
+box(which="outer", lwd=2)
 dev.off()
+
+
+for (i in 1:5){
+pdf(file=paste("~/dropbox/Adaptive Surveys/TexFiles/ExFixedSlides", i, ".pdf", sep=""), width=5, height=3)
+par(bg="white", mgp=c(1,0,0), tcl=0, mar=c(0,0,0,0), xaxt="n", yaxt="n", bty="o")
+layout(matrix(1:10, nrow=1, ncol=2), width=c(2,2))
+my.line.plotter2(i, it.obj=forFixed)
+    par(srt=90)
+    text(-4.95,.5, paste("Item", i), cex=1)
+    par(srt=0)
+  plot(x, post.plotter(x=x, item.nums=1:i, it.obj=forFixed), type="l", xlim=c(-5, 3.7), ylim=c(-.1, 1.1))
+  abline(h=c(0,1), col="gray", lwd=2)
+  segments(theta.true,0,theta.true,1, lty=2)
+  text(theta.true,1.06, expression(theta), cex=1)
+  text(seq(-4,3,by=1), -.06, seq(-4,3,by=1), cex=.9, col="gray20")
+    rect(-6, -0.15, -4.5, 1.15, col="gray80", lty=1, lwd=2)
+  par(srt=90)
+    text(-4.95, .5, expression(paste("p(", theta, "|", bold(y), ")")), cex=1)
+  par(srt=0)
+dev.off()
+}
 
 
 
@@ -225,6 +283,12 @@ mepv.plotter <- function(answers, make.plot=TRUE){
 }
 
 
+pdf(file="~/dropbox/Adaptive Surveys/TexFiles/EPVExampleSlides.pdf", width=5, height=4)
+par(mgp=c(1,0,0), tcl=0, mar=c(3,2,2,2))
+mepv.plotter(rep(NA, 60))
+title("Initial Item Selection")
+dev.off()
+
 pdf(file="~/dropbox/Adaptive Surveys/TexFiles/EPVExample.pdf")
 par(mfrow=c(2,2),  mgp=c(1,0,0), tcl=0, mar=c(3,2,2,2))
 answers <- rep(NA, 60)
@@ -236,4 +300,23 @@ for (i in 1:4){
 #  abline(v=forDyn[i,"thetaHat"], lty=2)
 }
 dev.off()
+
+mepv.plotter2 <- function(answers, make.plot=TRUE){
+  nItems <- 60
+  guessing <- rep(0, nItems)
+  questions <- data.frame(difficulty=difficulty, discrimination=discrimination,
+                          guessing=guessing, answers=answers)
+  cat <- new("CATsurv", questions=questions, priorParams=c(0, 1.75))
+  evalItems <- nextItem(cat)$all.estimates
+  new.item <- nextItem(cat)$next.item
+  evalItems <- evalItems[order(evalItems$difficulty),]
+  if(make.plot){
+  with(evalItems, plot(difficulty, epv, type="p", cex=.4, xlab="Difficulty", ylab="EPV"))
+  with(evalItems, points(difficulty, epv, type="l", cex=.4))
+  with(evalItems[as.character(new.item),], points(difficulty, epv, pch="X"))
+#  abline(v=theta.true, lty=2)
+  with(evalItems[as.character(new.item),], text(theta.true, epv, expression(theta)))
+}
+  return(item=new.item)
+}
 
