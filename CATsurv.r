@@ -55,12 +55,14 @@ setMethod(f="prior", signature=class.name, definition=function(cat, values, name
   return(prior.value)
 })
 
-setGeneric("estimateTheta", function(cat, D=1, lowerBound=-4, upperBound=4, quadPoints=33, ...){standardGeneric("estimateTheta")})
-setMethod(f="estimateTheta", signature=class.name, definition=function(cat, D=1, lowerBound=-4, upperBound=4, quadPoints=33, ...) {
+setGeneric("estimateTheta", function(cat, D=1, priorName=NULL, priorParams=NULL, lowerBound=-4 upperBound=4, quadPoints=33, ...){standardGeneric("estimateTheta")})
+setMethod(f="estimateTheta", signature=class.name, definition=function(cat, D=1, priorName=NULL, priorParams=NULL, lowerBound=-4, upperBound=4, quadPoints=33, ...) {
   X = seq(from=lowerBound, to=upperBound, length=quadPoints)
   applicable_rows = cat@questions[!is.na(cat@questions$answers), ]
   
-  prior.values = prior(cat, X, cat@priorName, cat@priorParams)
+  priorName = if (!is.null(priorName)) priorName else cat@priorName
+  priorParams = if (!is.null(priorParams)) priorParams else cat@priorParams
+  prior.values = prior(cat, X, priorName, priorParams)
   likelihood.values = rep(NA, times=length(X))
   for (i in 1:length(likelihood.values)) {
     likelihood.values[i] = likelihood(cat, X[i], applicable_rows, D)
@@ -70,12 +72,14 @@ setMethod(f="estimateTheta", signature=class.name, definition=function(cat, D=1,
   return(results)
 })
 
-setGeneric("estimateSE", function(cat, theta.hat, D=1, lowerBound=-4, upperBound=4, quadPoints=33, ...){standardGeneric("estimateSE")})
-setMethod(f="estimateSE", signature=class.name, definition=function(cat, theta.hat, D=1, lowerBound=-4, upperBound=4, quadPoints=33, ...) {
+setGeneric("estimateSE", function(cat, theta.hat, D=1, priorName=NULL, priorParams=NULL, lowerBound=-4, upperBound=4, quadPoints=33, ...){standardGeneric("estimateSE")})
+setMethod(f="estimateSE", signature=class.name, definition=function(cat, theta.hat, D=1, priorName=NULL, priorParams=NULL, lowerBound=-4, upperBound=4, quadPoints=33, ...) {
   X = seq(from=lowerBound, to=upperBound, length=quadPoints)
   applicable_rows = cat@questions[!is.na(cat@questions$answers), ]
   
-  prior.values = prior(cat, X, cat@priorName, cat@priorParams)
+  priorName = if (!is.null(priorName)) priorName else cat@priorName
+  priorParams = if (!is.null(priorParams)) priorParams else cat@priorParams
+  prior.values = prior(cat, X, priorName, priorParams)
   likelihood.values = rep(NA, times=length(X))
   for (i in 1:length(likelihood.values)) {
     likelihood.values[i] = likelihood(cat, X[i], applicable_rows, D)
