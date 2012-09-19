@@ -55,7 +55,7 @@ setMethod(f="prior", signature=class.name, definition=function(cat, values, name
   return(prior.value)
 })
 
-setGeneric("estimateTheta", function(cat, D=1, priorName=NULL, priorParams=NULL, lowerBound=-4 upperBound=4, quadPoints=33, ...){standardGeneric("estimateTheta")})
+setGeneric("estimateTheta", function(cat, D=1, priorName=NULL, priorParams=NULL, lowerBound=-4, upperBound=4, quadPoints=33, ...){standardGeneric("estimateTheta")})
 setMethod(f="estimateTheta", signature=class.name, definition=function(cat, D=1, priorName=NULL, priorParams=NULL, lowerBound=-4, upperBound=4, quadPoints=33, ...) {
   X = seq(from=lowerBound, to=upperBound, length=quadPoints)
   applicable_rows = cat@questions[!is.na(cat@questions$answers), ]
