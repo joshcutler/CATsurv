@@ -149,9 +149,9 @@ my.line.plotter <- function(item.num, it.obj){
   rect(-6, -0.15, -4.5, 1.15, col="gray80", lty=1, lwd=2)
 }
 
-pdf(file="~/dropbox/Adaptive Surveys/TexFiles/ExDyn.pdf", width=5, height=6)
+#pdf(file="~/dropbox/Adaptive Surveys/TexFiles/ExDyn.pdf", width=5, height=6)
 ## Make dynamic battery plot
-par(bg="white", mgp=c(1,0,0), tcl=0, mar=c(0,0,0,0), xaxt="n", yaxt="n", bty="o")
+#par(bg="white", mgp=c(1,0,0), tcl=0, mar=c(0,0,0,0), xaxt="n", yaxt="n", bty="o")
 layout(matrix(1:10, nrow=5, ncol=2), width=c(2,2))
 x <- seq(-5,4, length.out=500)
 for(i in 1:5){
@@ -172,7 +172,7 @@ for (i in 1:5){
   par(srt=0)
 }
 box(which="outer", lwd=2)
-dev.off()
+#dev.off()
 
 
 my.line.plotter2 <- function(item.num, it.obj){
@@ -211,8 +211,13 @@ dev.off()
 
 
 
+
+
+
+
+
 # Fixed battery plot
-pdf(file="~/dropbox/Adaptive Surveys/TexFiles/ExFixed.pdf", width=5, height=6)
+#pdf(file="~/dropbox/Adaptive Surveys/TexFiles/ExFixed.pdf", width=5, height=6)
 par(bg="white", mgp=c(1,0,0), tcl=0, mar=c(0,0,0,0), xaxt="n", yaxt="n", bty="o")
 layout(matrix(1:10, nrow=5, ncol=2), width=c(2,2))
 x <- seq(-5,4, length.out=500)
@@ -234,7 +239,10 @@ for (i in 1:5){
   par(srt=0)
 }
 box(which="outer", lwd=2)
-dev.off()
+#dev.off()
+
+
+
 
 
 for (i in 1:5){
@@ -258,6 +266,52 @@ dev.off()
 }
 
 
+### R&R Revision of this plot
+
+pdf(file="~/Dropbox/Adaptive Surveys/PA Submission/Posteriors.pdf", width=7, height=7.5)
+par(bg="white", mgp=c(0,0,0), tcl=0, mar=c(1,2,1.5,0), xaxt="n" , bty="o", mfrow=c(5,2), yaxt="n")
+for (i in 1:5){
+  plot(x, post.plotter(x=x, item.nums=1:i, it.obj=forFixed), type="l", xlim=c(-3.8, 3.1), ylim=c(-.1, 1.15), main=paste("Static (N=", i, ")", sep=""), ylab=expression(paste("p(", theta, "|", bold(y), ")")), xlab="")
+    text(seq(-4,3,by=1), -.06, seq(-4,3,by=1), cex=.9, col="gray20")
+  abline(h=c(0,1), col="gray", lwd=2)
+  segments(theta.true,0,theta.true,1, lty=2)
+  text(theta.true,1.06, expression(theta), cex=1)
+  segments(forFixed[,"thetaHat"][i], 0, forFixed[,"thetaHat"][i], 1)
+  text(forFixed[,"thetaHat"][i],1.08, expression(hat(theta)), cex=1)
+  plot(x, post.plotter(x=x, item.nums=1:i, it.obj=forDyn), type="l", xlim=c(-3.8, 3.1), ylim=c(-.1, 1.15), main=paste("Dynamic (N=", i, ")", sep=""), ylab=expression(paste("p(", theta, "|", bold(y), ")")), xlab="")
+      text(seq(-4,3,by=1), -.06, seq(-4,3,by=1), cex=.9, col="gray20")
+  abline(h=c(0,1), col="gray", lwd=2)
+  segments(theta.true,0,theta.true,1, lty=2)
+  text(theta.true,1.06, expression(theta), cex=1)
+  segments(forDyn[,"thetaHat"][i], 0, forDyn[,"thetaHat"][i], 1)
+  text(forDyn[,"thetaHat"][i],1.09, expression(hat(theta)), cex=1)
+}
+dev.off()
+
+
+pdf(file="~/Dropbox/Adaptive Surveys/PA Submission/ICC.pdf", width=7, height=7.5)
+my.line.plotter3 <- function(item.num, it.obj, stat){
+  plot(NULL, xlim=c(-4,3), ylim=c(-0.1,1.1), xlab="",  main=paste(stat, "item", item.num), ylab=expression(paste("Pr(", y[ij], "=1", "|", theta, ")")))
+  abline(h=c(0,1), col="gray", lwd=2)
+  lines(x,my.curve(x=x, it.num=item.num, it.obj=it.obj), type="l", lwd=2)
+  segments(theta.true,0,theta.true,1, lty=2)
+  text(theta.true,1.06, expression(theta), cex=1)
+  abline(h=.5, lty=3, col="gray")
+  text(2,1.065, expression(paste("Pr(", y[ij], "=1", "|", theta, ")=1")))
+  text(2,.07, expression(paste("Pr(", y[ij], "=1", "|", theta, ")=0")))
+  text(seq(-4,3,by=1), -.06, seq(-4,3,by=1), cex=.9, col="gray20")
+#  rect(-6, -0.15, -4.5, 1.15, col="gray80", lty=1, lwd=2)
+}
+par(bg="white", mgp=c(0,0,0), tcl=0, mar=c(1,2,1.5,0), xaxt="n" , bty="o", mfrow=c(5,2), yaxt="n")
+for(i in 1:5){
+  my.line.plotter3(i, it.obj=forFixed, "Fixed")
+  my.line.plotter3(i, it.obj=forDyn, "Dynamic")
+}
+dev.off()
+
+
+forFixed[,"thetaHat"][5]
+forDyn[,"thetaHat"][5]
 
 ## MEPV plot
 

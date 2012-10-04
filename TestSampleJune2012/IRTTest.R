@@ -9,20 +9,20 @@ setwd("~/github/CATsurv/TestSampleJune2012/")
 testData <- read.csv("results.csv", header=T, row.names="response_id")
 testData <- testData[,-1] # Remove firs useless column
 
-
 ## Read in order
 order <- read.csv("ordered.csv", header=T, row.names="response_id")
-
-
 
 ## Read in mapping
 mapping <- read.csv("Mapping.csv", header=T)
 colnames(mapping)
 
-
 use.these <- c(1804:1835, 1837:1868, 1708:1710, 1712:1744, 1746:1753, 1755:1772, 1774:1775)
 theseAreStatic <- c(1708:1710, 1712:1744, 1746:1753, 1755:1772, 1774:1775)
 theseAreDyn <- c(1804:1835, 1837:1868)
+
+theseAreOutcomesDyn <- c(1657:1669)
+theseAreOutcomesStatic <- c(1757:1769)
+
 
 ## Recode NAs to 0s for knowledge questions
 for (i in use.these){
@@ -30,10 +30,8 @@ for (i in use.these){
   testData[(testData[,paste("question_", i, sep="")]==-1), paste("question_", i, sep="")] <- 0
 }
 
-
 ## Extract conditions
 dynCond <- testData[,"question_1712"]==-99
-
 
 ## Make sub-setted data
 dynResultsRaw <- testData[dynCond,]
@@ -43,14 +41,12 @@ staticResultsRaw <- testData[!dynCond,]
 dynResultsRaw <- dynResultsRaw[,!colnames(testData) %in% paste("question_", theseAreStatic, sep="")]
 staticResultsRaw <- staticResultsRaw[,!colnames(testData) %in% paste("question_", theseAreDyn, sep="")]
 
-
-
+# Make outcome data for regressions at the bottom
+statOut <- staticResultsRaw[,colnames(staticResultsRaw) %in% paste("question_", theseAreOutcomesStatic, sep="")]
+dynOut <- dynResultsRaw[,colnames(dynResultsRaw) %in% paste("question_", theseAreOutcomesDyn, sep="")]
 
 ## Rename columns in static file
 colnames(dynResultsRaw)[colnames(dynResultsRaw)%in%paste("question_", theseAreDyn, sep="")] <- paste("q", 1:64, sep="")
-
-
-
 
 ## Rename associated entries in the order and mapping files
 counter <- 1
@@ -135,7 +131,6 @@ testResults <- function(rows, .n){
                  out <- data.frame(theta.true=theta.true, theta.est=theta.est, theta.se=theta.se)
                  return(out)
                }
-               
                )
   return(res)
 }
@@ -159,15 +154,15 @@ results.plotter <- function(y.min=0, y.max=2.5, y.lab="Squared error", xlab=expr
   static.obj=static.obj[order(static.obj$theta.true),]
   plot(NULL, xlim=c(-3.1,3.1), ylim=c(y.min, y.max), ylab=y.lab, xlab=expression(paste("True values of ", theta))  )
   mse.dyn <- (dyn.obj$theta.est-dyn.obj$theta.true)^2 + dyn.obj$theta.se^2
-  points(dyn.obj$theta.true, mse.dyn,  col="skyblue", pch=24, cex=.5)
+  points(dyn.obj$theta.true, mse.dyn,  col="gray90", pch=24, cex=.5)
   mse.stat <- (static.obj$theta.est-static.obj$theta.true)^2 + static.obj$theta.se^2
-  points(static.obj$theta.true, mse.stat, col="pink", pch=23, cex=.5)
-  lines(dyn.obj$theta.true, predict(loess(mse.dyn ~ dyn.obj$theta.true, span=.5, degree=1)), type="l", lwd=2, col="blue", lty=2)
-  lines(static.obj$theta.true, predict(loess(mse.stat ~ static.obj$theta.true, span=.5, degree=1)), type="l", lwd=2, col="red")
+  points(static.obj$theta.true, mse.stat, col="gray65", pch=23, cex=.5)
+  lines(dyn.obj$theta.true, predict(loess(mse.dyn ~ dyn.obj$theta.true, span=.5, degree=1)), type="l", lwd=2, col="black", lty=2)
+  lines(static.obj$theta.true, predict(loess(mse.stat ~ static.obj$theta.true, span=.5, degree=1)), type="l", lwd=2, col="black")
     rect(-3.35, y.max-.075, 3.35, y.max+100, col="gray80", lwd=1)
   text(0, y.max+.02, this.title, cex=1.25)
 }
-pdf(file="~/Dropbox/Adaptive Surveys/TexFiles/EmpResults.pdf", width=6, height=6)
+pdf(file="~/Dropbox/Adaptive Surveys/PA Submission/EmpResults.pdf", width=6, height=6)
 par(bg="white", mgp=c(1,0,0), tcl=0, mar=c(0,2,2.1,0), xaxt="n", yaxt="s", bty="o")
 layout(matrix(1:6, nrow=3, ncol=2), height=c(3,3,1.3))
 results.plotter(dyn.obj=dynRes3, static.obj=statRes3)
@@ -175,7 +170,7 @@ par(mar=c(2.1,2,0,0), xaxt="s")
 results.plotter(dyn.obj=dynRes7, static.obj=statRes7, this.title="N=7")
 par(bty="n", xaxt="n", yaxt="n", mar=c(0,0,0,0), mgp=c(0,0,0))
 plot(NULL, xlim=c(0,1), ylim=c(0,1),  ylab="", xlab="")
-legend(.5,.9, c("Static scale est.", "CAT scale est.", "Loess for static", "Loess for CAT"), pch=c(23,24, 26, 26), col=c("pink", "skyblue", "red", "blue"),  lty=c(0,0,1,2), lwd=c(1,1,2,2), cex=1.3)
+legend(.5,.9, c("Static scale est.", "CAT scale est.", "Loess for static", "Loess for CAT"), pch=c(23,24, 26, 26), col=c("gray65", "gray90", "black", "black"),  lty=c(0,0,1,2), lwd=c(1,1,2,2), cex=1.3)
 par(mar=c(0,0,2.1,2), xaxt="n", yaxt="n", bty="o")
 results.plotter(dyn.obj=dynRes5, static.obj=statRes5, this.title="N=5")
 par(mar=c(2.1,0,0,2), xaxt="s", mgp=c(1,0,0))
@@ -184,6 +179,25 @@ dev.off()
 
 
 
+
+
+my.wilcox.test <- function(dyn.obj=dynRes3, stat.obj=statRes3){
+  mse.dyn <- (dyn.obj$theta.est-dyn.obj$theta.true)^2 + dyn.obj$theta.se^2
+  mse.stat <- (static.obj$theta.est-static.obj$theta.true)^2 + static.obj$theta.se^2
+  return(wilcox.test(mse.dyn, mse.stat))
+}
+my.wilcox.test(dynRes3, statRes3)
+my.wilcox.test(dynRes5, statRes5)
+my.wilcox.test(dynRes7, statRes7)
+my.wilcox.test(dynRes10, statRes10)
+
+
+
+
+
+
+
+####
 results.plotter.bias <- function(y.min=-2.5, y.max=2.5, y.lab="Bias", xlab=expression(paste("True values of ", theta)),
                            dyn.obj = dynRes3,static.obj = statRes3, this.title="N=3"){
   dyn.obj=dyn.obj[order(dyn.obj$theta.true),]
@@ -211,20 +225,6 @@ results.plotter.bias(dyn.obj=dynRes5, static.obj=statRes5, this.title="N=5")
 par(mar=c(2.1,0,0,2), xaxt="s", mgp=c(1,0,0))
 results.plotter.bias(dyn.obj=dynRes10, static.obj=statRes10, this.title="N=10")
 
-
-
-
-
-
-my.wilcox.test <- function(dyn.obj=dynRes3, stat.obj=statRes3){
-  mse.dyn <- (dyn.obj$theta.est-dyn.obj$theta.true)^2 + dyn.obj$theta.se^2
-  mse.stat <- (static.obj$theta.est-static.obj$theta.true)^2 + static.obj$theta.se^2
-  return(wilcox.test(mse.dyn, mse.stat))
-}
-my.wilcox.test(dynRes3, statRes3)
-my.wilcox.test(dynRes5, statRes5)
-my.wilcox.test(dynRes7, statRes7)
-my.wilcox.test(dynRes10, statRes10)
 
 
 
@@ -293,18 +293,97 @@ statB <- (c(statB,median(abs(statRes9$theta.est-statRes3$theta.true))))
 statB <- (c(statB,median(abs(statRes10$theta.est-statRes3$theta.true))))
 
 
-pdf(file="~/Dropbox/Adaptive Surveys/TexFiles/Comparison.pdf", width=6.5, height=4)
-par(bg="white", mgp=c(1,0,0), tcl=0, mar=c(2.1,2,2.1,1), xaxt="s", yaxt="s", bty="o", mfrow=c(1,2))
-plot(3:10, dyn, pch=24, col="blue", type="b", xlab="Number of questions", ylab="Median squared error", ylim=c(0.2, .62), main="MSE by Scale Length", lty=2)
-points(3:10, stat, pch=23, col="red", type="b")
+dynC <- NULL
+dynC <- (c(dynC,sum(abs(dynRes3$theta.est-dynRes3$theta.true))))
+dynC <- (c(dynC,sum(abs(dynRes4$theta.est-dynRes4$theta.true))))
+dynC <- (c(dynC,sum(abs(dynRes5$theta.est-dynRes3$theta.true))))
+dynC <- (c(dynC,sum(abs(dynRes6$theta.est-dynRes3$theta.true))))
+dynC <- (c(dynC,sum(abs(dynRes7$theta.est-dynRes3$theta.true))))
+dynC <- (c(dynC,sum(abs(dynRes8$theta.est-dynRes3$theta.true))))
+dynC <- (c(dynC,sum(abs(dynRes9$theta.est-dynRes3$theta.true))))
+dynC <- (c(dynC,sum(abs(dynRes10$theta.est-dynRes3$theta.true))))
+
+statC <- NULL
+statC <- (c(statC,sum(abs(statRes3$theta.est-statRes3$theta.true))))
+statC <- (c(statC,sum(abs(statRes4$theta.est-statRes4$theta.true))))
+statC <- (c(statC,sum(abs(statRes5$theta.est-statRes3$theta.true))))
+statC <- (c(statC,sum(abs(statRes6$theta.est-statRes3$theta.true))))
+statC <- (c(statC,sum(abs(statRes7$theta.est-statRes3$theta.true))))
+statC <- (c(statC,sum(abs(statRes8$theta.est-statRes3$theta.true))))
+statC <- (c(statC,sum(abs(statRes9$theta.est-statRes3$theta.true))))
+statC <- (c(statC,sum(abs(statRes10$theta.est-statRes3$theta.true))))
+
+
+
+dynD <- NULL
+dynD <- (c(dynD,median(dynRes3$theta.se^2)))
+dynD <- (c(dynD,median(dynRes4$theta.se^2)))
+dynD <- (c(dynD,median(dynRes5$theta.se^2)))
+dynD <- (c(dynD,median(dynRes6$theta.se^2)))
+dynD <- (c(dynD,median(dynRes7$theta.se^2)))
+dynD <- (c(dynD,median(dynRes8$theta.se^2)))
+dynD <- (c(dynD,median(dynRes9$theta.se^2)))
+dynD <- (c(dynD,median(dynRes10$theta.se^2)))
+
+statD<- NULL
+statD <- (c(statD,median(statRes3$theta.se^2)))
+statD <- (c(statD,median(statRes4$theta.se^2)))
+statD <- (c(statD,median(statRes5$theta.se^2)))
+statD <- (c(statD,median(statRes6$theta.se^2)))
+statD <- (c(statD,median(statRes7$theta.se^2)))
+statD <- (c(statD,median(statRes8$theta.se^2)))
+statD <- (c(statD,median(statRes9$theta.se^2)))
+statD <- (c(statD,median(statRes10$theta.se^2)))
+
+
+
+
+pdf(file="~/Dropbox/Adaptive Surveys/PA Submission/Comparison.pdf", width=7, height=7)
+par(bg="white", mgp=c(1,0,0), tcl=0, mar=c(2.1,2,2.1,1), xaxt="s", yaxt="s", bty="o", mfrow=c(2,2))
+plot(3:10, dyn, pch=24, col="gray40", type="b", xlab="Scale length", ylab="Median squared error", ylim=c(0.2, .62), main="Mean squared error", lty=2)
+points(3:10, stat, pch=23, col="black", type="b")
 #abline(h=stat, col="pink")
-legend(7,.62, c("Static scale", "CAT scale"), pch=c(23,24), col=c("red", "blue"),  lty=c(1,2), cex=.75)
-plot(3:10, dynB, pch=24, col="blue", type="b", xlab="Number of questions", ylab="Median absolute deviation", ylim=c(0.21, .4), main="MAD by Scale Length", lty=2) #
-points(3:10, statB, pch=23, col="red", type="b")
+legend(7,.62, c("Static scale", "CAT scale"), pch=c(23,24), col=c("black", "gray40"),  lty=c(1,2), cex=.75)
+plot(3:10, dynB, pch=24, col="gray40", type="b", xlab="Scale length", ylab="Median absolute bias", ylim=c(0.20, .4), main="Median absolute bias", lty=2) #
+points(3:10, statB, pch=23, col="black", type="b")
 #abline(h=statB, col="pink")
-legend(7,.4, c("Static scale", "CAT scale"), pch=c(23,24), col=c("red", "blue"),  lty=c(1,2), cex=.75)
+legend(7,.4, c("Static scale", "CAT scale"), pch=c(23,24), col=c("black", "gray40"),  lty=c(1,2), cex=.75)
+plot(3:10, dynC, pch=24, col="gray40", type="b", xlab="Scale length", ylab="Total absolute bias", ylim=c(110, 200), main="Total absolute bias", lty=2) #
+points(3:10, statC, pch=23, col="black", type="b")
+#abline(h=statB, col="pink")
+legend(7,200, c("Static scale", "CAT scale"), pch=c(23,24), col=c("black", "gray40"),  lty=c(1,2), cex=.75)
+plot(3:10, dynD, pch=24, col="gray40", type="b", xlab="Scale length", ylab="Median posterior variance", ylim=c(0.1, .45), main="Median posterior variance", lty=2) #
+points(3:10, statD, pch=23, col="black", type="b")
+#abline(h=statB, col="pink")
+legend(7,.45, c("Static scale", "CAT scale"), pch=c(23,24), col=c("black", "gray40"),  lty=c(1,2), cex=.75)
 dev.off()
 
 
 
+## Some population-level statistics
+var(dynRes5$theta.est)
+var(statRes5$theta.est)
+
+
+##missing extremes
+##upper
+.table <- table(dynRes5$theta.est==max(dynRes5$theta.est))
+.table
+.table/sum(.table)
+.table <- table(statRes5$theta.est==max(statRes5$theta.est))
+.table
+.table/sum(.table)
+
+##lower
+.table <- table(dynRes5$theta.est==min(dynRes5$theta.est))
+.table
+.table/sum(.table)
+.table <- table(statRes5$theta.est==min(statRes5$theta.est))
+.table
+.table/sum(.table)
+
+
+## Here is where we can run some regressions or something
+dynOut <- cbind(dynOut,dynRes5$theta.est)
+statOutt <- cbind(statOut, statRes5$theta.est)
 
