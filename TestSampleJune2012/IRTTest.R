@@ -20,8 +20,8 @@ use.these <- c(1804:1835, 1837:1868, 1708:1710, 1712:1744, 1746:1753, 1755:1772,
 theseAreStatic <- c(1708:1710, 1712:1744, 1746:1753, 1755:1772, 1774:1775)
 theseAreDyn <- c(1804:1835, 1837:1868)
 
-theseAreOutcomesDyn <- c(1657:1669)
-theseAreOutcomesStatic <- c(1757:1769)
+theseAreOutcomes <- c(1685:1697)
+
 
 
 ## Recode NAs to 0s for knowledge questions
@@ -42,8 +42,8 @@ dynResultsRaw <- dynResultsRaw[,!colnames(testData) %in% paste("question_", thes
 staticResultsRaw <- staticResultsRaw[,!colnames(testData) %in% paste("question_", theseAreDyn, sep="")]
 
 # Make outcome data for regressions at the bottom
-statOut <- staticResultsRaw[,colnames(staticResultsRaw) %in% paste("question_", theseAreOutcomesStatic, sep="")]
-dynOut <- dynResultsRaw[,colnames(dynResultsRaw) %in% paste("question_", theseAreOutcomesDyn, sep="")]
+statOut <- staticResultsRaw[,colnames(staticResultsRaw) %in% paste("question_", theseAreOutcomes, sep="")]
+dynOut <- dynResultsRaw[,colnames(dynResultsRaw) %in% paste("question_", theseAreOutcomes, sep="")]
 
 ## Rename columns in static file
 colnames(dynResultsRaw)[colnames(dynResultsRaw)%in%paste("question_", theseAreDyn, sep="")] <- paste("q", 1:64, sep="")
@@ -384,6 +384,60 @@ var(statRes5$theta.est)
 
 
 ## Here is where we can run some regressions or something
+library(car)
+
 dynOut <- cbind(dynOut,dynRes5$theta.est)
-statOutt <- cbind(statOut, statRes5$theta.est)
+statOut <- cbind(statOut, statRes5$theta.est)
+colnames(dynOut)[14] <- colnames(statOut)[14] <- "know"
+dynOut$know <- (dynOut$know-mean(dynOut$know))/sd(dynOut$know)
+statOut$know <- (statOut$know-mean(statOut$know))/sd(statOut$know)
+
+dynOut$question_1685 <- recode(dynOut$question_1685, "2=0")
+statOut$question_1685 <- recode(statOut$question_1685, "2=0")
+summary(glm(question_1685~know, data=dynOut, family="binomial"))
+summary(glm(question_1685~know, data=statOut, family="binomial"))
+
+
+dynOut$question_1686 <- recode(dynOut$question_1686, "2=0")
+statOut$question_1686 <- recode(statOut$question_1686, "2=0")
+summary(glm(question_1686~know, data=dynOut, family="binomial"))
+summary(glm(question_1686~know, data=statOut, family="binomial"))
+
+
+
+dynOut$question_1687 <- recode(dynOut$question_1687, "2=0")
+statOut$question_1687 <- recode(statOut$question_1687, "2=0")
+summary(glm(question_1687~know, data=dynOut, family="binomial"))
+summary(glm(question_1687~know, data=statOut, family="binomial"))
+
+
+
+dynOut$question_1689 <- recode(dynOut$question_1689, "2=0")
+statOut$question_1689 <- recode(statOut$question_1689, "2=0")
+summary(glm(question_1689~know, data=dynOut, family="binomial"))
+summary(glm(question_1689~know, data=statOut, family="binomial"))
+
+
+
+
+
+dynOut$question_1693 <- recode(dynOut$question_1693, "2=0")
+statOut$question_1693 <- recode(statOut$question_1693, "2=0")
+summary(glm(question_1693~know, data=dynOut, family="binomial"))
+summary(glm(question_1693~know, data=statOut, family="binomial"))
+
+
+
+# These ones
+summary(lm(question_1695~know, data=dynOut))
+summary(lm(question_1695~know, data=statOut))
+
+
+summary(lm(question_1697~know, data=dynOut))
+summary(lm(question_1697~know, data=statOut))
+
+
+
+
+str(dynOut)
 
