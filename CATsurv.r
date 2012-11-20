@@ -30,6 +30,7 @@ setValidity(class.name, function(object) {
 setMethod("initialize", class.name, function(.Object, ...) {
   value = callNextMethod()
   validObject(value)
+  
   return(value)
 })
 
@@ -148,3 +149,6 @@ setMethod(f="debugNextItem", signature=class.name, definition=function(cat, thet
   
   return(next.item)
 })         
+
+# Add a real constructor, silly S4
+CATsurv = function(...) new("CATsurv",...)
