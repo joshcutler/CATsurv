@@ -118,7 +118,7 @@ setMethod(f="nextItem", signature=class.name, definition=function(cat, theta.est
   }
   available_questions$epv = NA
   for (i in 1:nrow(available_questions)) {
-    available_questions[i,]$epv = expectedPV(cat, as.numeric(row.names(available_questions[i,])), theta.est)
+    available_questions[i,]$epv = expectedPV(cat, row.names(available_questions[i,]), theta.est)
   }
 
   next.item = available_questions[available_questions$epv == min(available_questions$epv), ]
