@@ -4,18 +4,22 @@ class.name = "CATsurv"
 setClass(class.name,
          representation=representation(
            questions="data.frame",
+           difficulties="vector",
            priorName="character",
-           priorParams="numeric"
+           priorParams="numeric",
+           poly='logical'
            ),
          prototype=prototype(
            priorName="normal",
-           priorParams=c(1,1)
+           priorParams=c(1,1),
+           poly=FALSE
            )
          )
 
 setValidity(class.name, function(object) {
   cols = names(object@questions)
-  if (!("difficulty" %in% cols))
+  
+  if (!object@poly &&!("difficulty" %in% cols))
     return("No difficulty column detected in @questions")
   if (!("discrimination" %in% cols))
     return("No discrimination column detected in @questions")
@@ -23,6 +27,11 @@ setValidity(class.name, function(object) {
     return("No guessing column detected in @questions")
   if (!("answers" %in% cols))
     return("No answers column detected in @questions")
+  if (object@poly) 
+    if (!("response_count" %in% cols))
+      return("No response_count column detected in @questions for polytmous model")
+    if (is.null(object@difficulties))
+      return("No difficulties present for polytmous model")
 
   return(TRUE)
 })
@@ -41,8 +50,28 @@ setMethod(f="three.pl", signature=class.name, definition=function(cat, theta, di
 
 setGeneric("likelihood", function(cat, theta, items, D=1){standardGeneric("likelihood")})
 setMethod(f="likelihood", signature=class.name, definition=function(cat, theta, items, D=1) {
-  probabilities = three.pl(cat, theta, items$difficulty, items$discrimination, items$guessing, D)
-  prod(probabilities^items$answers * (1 - probabilities)^(1 - items$answers))
+  if (cat@poly) {
+    probabilities = c()
+    L = 1
+    for (question in rownames(items)) {
+      this.question.cdf = three.pl(cat, theta, cat@difficulties[[question]], items[question, 'discrimination'], items[question, 'guessing'], D)
+      this.question.pdf = c()
+      for (i in 1:length(this.question.cdf)) {
+        if (i == 1) {
+          this.question.pdf[i] = this.question.cdf[i]
+        } else if (i == length(this.question.cdf)) {
+          this.question.pdf[i] = 1 - this.question.cdf[i]
+        } else {
+          this.question.pdf[i] = this.question.cdf[i] - this.question.pdf[i-1]
+        }
+      }
+      L = L * this.question.pdf[items[question, 'answers']]
+    }
+  } else {
+    probabilities = three.pl(cat, theta, items$difficulty, items$discrimination, items$guessing, D)
+    L = prod(probabilities^items$answers * (1 - probabilities)^(1 - items$answers))
+  }
+  return(L)
 })
 
 setGeneric("prior", function(cat, values, name, params){standardGeneric("prior")})
@@ -64,6 +93,7 @@ setMethod(f="estimateTheta", signature=class.name, definition=function(cat, D=1,
   priorParams = if (!is.null(priorParams)) priorParams else cat@priorParams
   prior.values = prior(cat, X, priorName, priorParams)
   likelihood.values = rep(NA, times=length(X))
+  
   for (i in 1:length(likelihood.values)) {
     likelihood.values[i] = likelihood(cat, X[i], applicable_rows, D)
   }
