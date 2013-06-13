@@ -121,38 +121,64 @@ setMethod(f="estimateSE", signature=class.name, definition=function(cat, theta.h
 
 setGeneric("expectedPV", function(cat, item, theta.est, D=1, lowerBound=-4, upperBound=4, quadPoints=33){standardGeneric("expectedPV")})
 setMethod(f="expectedPV", signature=class.name, definition=function(cat, item, theta.est, D=1, lowerBound=-4, upperBound=4, quadPoints=33) {
-  prob.correct = three.pl(cat, theta.est, cat@questions[item,]$difficulty, cat@questions[item,]$discrimination, cat@questions[item,]$guessing, D)
-  prob.incorrect = 1 - prob.correct
-
-  old_val = cat@questions[item, 'answers']
-
-  cat@questions[item, 'answers'] = 1
-  theta.correct = estimateTheta(cat, D=D, lowerBound=lowerBound, upperBound=upperBound, quadPoints=quadPoints)
-  variance.correct = estimateSE(cat, theta.correct, D=D, lowerBound=lowerBound, upperBound=upperBound, quadPoints=quadPoints)^2
-
-  cat@questions[item, 'answers'] = 0
-  theta.incorrect = estimateTheta(cat, D=D, lowerBound=lowerBound, upperBound=upperBound, quadPoints=quadPoints)
-  variance.incorrect = estimateSE(cat, theta.incorrect, D=D, lowerBound=lowerBound, upperBound=upperBound, quadPoints=quadPoints)^2
-
-  cat@questions[item, 'answers'] = if (is.null(old_val) || is.na(old_val)) NA else old_val
-
-  return(prob.correct*variance.correct + prob.incorrect*variance.incorrect)
+  if (cat@poly) {
+    row.name = item
+    thetas = rep(NA, length(cat@difficulties[row.name]))
+    this.difficulties = cat@difficulties[row.name][[1]]
+    
+    for (i in 1:length(this.difficulties)) {
+      cat@questions[row.name, 'answers'] = i
+      thetas[i] = estimateTheta(cat, D=D, lowerBound=lowerBound, upperBound=upperBound, quadPoints=quadPoints)
+    }
+    cat@questions[row.name, 'answers'] = NA
+    
+    this.question.cdf = three.pl(cat, theta.est, cat@difficulties[[row.name]], cat@questions[row.name, 'discrimination'], cat@questions[row.name, 'guessing'], D)
+    this.question.pdf = c()
+    for (i in 1:length(this.question.cdf)) {
+      if (i == 1) {
+        this.question.pdf[i] = this.question.cdf[i]
+      } else if (i == length(this.question.cdf)) {
+        this.question.pdf[i] = 1 - this.question.cdf[i]
+      } else {
+        this.question.pdf[i] = this.question.cdf[i] - this.question.pdf[i-1]
+      }
+    }
+    return (sum(thetas * this.question.pdf))
+  } else {
+    prob.correct = three.pl(cat, theta.est, cat@questions[item,]$difficulty, cat@questions[item,]$discrimination, cat@questions[item,]$guessing, D)
+    prob.incorrect = 1 - prob.correct
+  
+    old_val = cat@questions[item, 'answers']
+  
+    cat@questions[item, 'answers'] = 1
+    theta.correct = estimateTheta(cat, D=D, lowerBound=lowerBound, upperBound=upperBound, quadPoints=quadPoints)
+    variance.correct = estimateSE(cat, theta.correct, D=D, lowerBound=lowerBound, upperBound=upperBound, quadPoints=quadPoints)^2
+  
+    cat@questions[item, 'answers'] = 0
+    theta.incorrect = estimateTheta(cat, D=D, lowerBound=lowerBound, upperBound=upperBound, quadPoints=quadPoints)
+    variance.incorrect = estimateSE(cat, theta.incorrect, D=D, lowerBound=lowerBound, upperBound=upperBound, quadPoints=quadPoints)^2
+  
+    cat@questions[item, 'answers'] = if (is.null(old_val) || is.na(old_val)) NA else old_val
+  
+    return(prob.correct*variance.correct + prob.incorrect*variance.incorrect)
+  }
 })
 
 setGeneric("nextItem", function(cat, theta.est=NA, D=1, lowerBound=-4, upperBound=4, quadPoints=33){standardGeneric("nextItem")})
 setMethod(f="nextItem", signature=class.name, definition=function(cat, theta.est=NA, D=1, lowerBound=-4, upperBound=4, quadPoints=33) {
-  available_questions = cat@questions[!(cat@questions$answers %in% c(0, 1)), ]
+  available_questions = cat@questions[is.na(cat@questions$answers), ]
 
   if (is.na(theta.est)) {
     theta.est = estimateTheta(cat, D=D, lowerBound=lowerBound, upperBound=upperBound, quadPoints=quadPoints)
   }
+  
   available_questions$epv = NA
   for (i in 1:nrow(available_questions)) {
     available_questions[i,]$epv = expectedPV(cat, row.names(available_questions[i,]), theta.est)
   }
 
-  next.item = available_questions[available_questions$epv == min(available_questions$epv), ]
-  to.return = list(all.estimates=available_questions, next.item=row.names(next.item))
+  next.item = available_questions[available_questions$epv == min(available_questions$epv, na.rm=TRUE), ]
+  to.return = list(all.estimates=available_questions, next.item=row.names(next.item)[1])
 
   return(to.return)
 })
