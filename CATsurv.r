@@ -4,18 +4,22 @@ class.name = "CATsurv"
 setClass(class.name,
          representation=representation(
            questions="data.frame",
+           difficulties="vector",
            priorName="character",
-           priorParams="numeric"
+           priorParams="numeric",
+           poly='logical'
            ),
          prototype=prototype(
            priorName="normal",
-           priorParams=c(1,1)
+           priorParams=c(1,1),
+           poly=FALSE
            )
          )
 
 setValidity(class.name, function(object) {
   cols = names(object@questions)
-  if (!("difficulty" %in% cols))
+  
+  if (!object@poly &&!("difficulty" %in% cols))
     return("No difficulty column detected in @questions")
   if (!("discrimination" %in% cols))
     return("No discrimination column detected in @questions")
@@ -23,36 +27,60 @@ setValidity(class.name, function(object) {
     return("No guessing column detected in @questions")
   if (!("answers" %in% cols))
     return("No answers column detected in @questions")
-  
+  if (object@poly) 
+    if (!("response_count" %in% cols))
+      return("No response_count column detected in @questions for polytmous model")
+    if (is.null(object@difficulties))
+      return("No difficulties present for polytmous model")
+
   return(TRUE)
 })
 
 setMethod("initialize", class.name, function(.Object, ...) {
   value = callNextMethod()
   validObject(value)
-  
   return(value)
 })
 
 setGeneric("three.pl", function(cat, theta, difficulty, discrimination, guessing, D=1){standardGeneric("three.pl")})
 setMethod(f="three.pl", signature=class.name, definition=function(cat, theta, difficulty, discrimination, guessing, D=1) {
   exp.portion = exp(D*discrimination*(theta - difficulty))
-  prob = guessing + (1 - guessing)*(exp.portion / (1 + exp.portion)) 
+  prob = guessing + (1 - guessing)*(exp.portion / (1 + exp.portion))
 })
 
 setGeneric("likelihood", function(cat, theta, items, D=1){standardGeneric("likelihood")})
 setMethod(f="likelihood", signature=class.name, definition=function(cat, theta, items, D=1) {
-  probabilities = three.pl(cat, theta, items$difficulty, items$discrimination, items$guessing, D)
-  prod(probabilities^items$answers * (1 - probabilities)^(1 - items$answers))
+  if (cat@poly) {
+    probabilities = c()
+    L = 1
+    for (question in rownames(items)) {
+      this.question.cdf = three.pl(cat, theta, cat@difficulties[[question]], items[question, 'discrimination'], items[question, 'guessing'], D)
+      this.question.pdf = c()
+      for (i in 1:length(this.question.cdf)) {
+        if (i == 1) {
+          this.question.pdf[i] = this.question.cdf[i]
+        } else if (i == length(this.question.cdf)) {
+          this.question.pdf[i] = 1 - this.question.cdf[i]
+        } else {
+          this.question.pdf[i] = this.question.cdf[i] - this.question.pdf[i-1]
+        }
+      }
+      L = L * this.question.pdf[items[question, 'answers']]
+    }
+  } else {
+    probabilities = three.pl(cat, theta, items$difficulty, items$discrimination, items$guessing, D)
+    L = prod(probabilities^items$answers * (1 - probabilities)^(1 - items$answers))
+  }
+  return(L)
 })
 
 setGeneric("prior", function(cat, values, name, params){standardGeneric("prior")})
 setMethod(f="prior", signature=class.name, definition=function(cat, values, name, params) {
-  prior.value = switch(name, 
+  prior.value = switch(name,
                        normal = dnorm(values, params[1], params[2]),
                        cauchy = dcauchy(values, params[1], params[2]),
-                       t = dt(values, params[1], params[2])
-                       )
+                       t = 1 / params[2] * dt((values - params[1]) / params[2], df=params[3])
+                      )
   return(prior.value)
 })
 
@@ -60,15 +88,16 @@ setGeneric("estimateTheta", function(cat, D=1, priorName=NULL, priorParams=NULL,
 setMethod(f="estimateTheta", signature=class.name, definition=function(cat, D=1, priorName=NULL, priorParams=NULL, lowerBound=-4, upperBound=4, quadPoints=33, ...) {
   X = seq(from=lowerBound, to=upperBound, length=quadPoints)
   applicable_rows = cat@questions[!is.na(cat@questions$answers), ]
-  
+
   priorName = if (!is.null(priorName)) priorName else cat@priorName
   priorParams = if (!is.null(priorParams)) priorParams else cat@priorParams
   prior.values = prior(cat, X, priorName, priorParams)
   likelihood.values = rep(NA, times=length(X))
+  
   for (i in 1:length(likelihood.values)) {
     likelihood.values[i] = likelihood(cat, X[i], applicable_rows, D)
   }
-  
+
   results = integrate.xy(X, X*likelihood.values*prior.values) / integrate.xy(X, likelihood.values*prior.values)
   return(results)
 })
@@ -77,7 +106,7 @@ setGeneric("estimateSE", function(cat, theta.hat, D=1, priorName=NULL, priorPara
 setMethod(f="estimateSE", signature=class.name, definition=function(cat, theta.hat, D=1, priorName=NULL, priorParams=NULL, lowerBound=-4, upperBound=4, quadPoints=33, ...) {
   X = seq(from=lowerBound, to=upperBound, length=quadPoints)
   applicable_rows = cat@questions[!is.na(cat@questions$answers), ]
-  
+
   priorName = if (!is.null(priorName)) priorName else cat@priorName
   priorParams = if (!is.null(priorParams)) priorParams else cat@priorParams
   prior.values = prior(cat, X, priorName, priorParams)
@@ -85,46 +114,72 @@ setMethod(f="estimateSE", signature=class.name, definition=function(cat, theta.h
   for (i in 1:length(likelihood.values)) {
     likelihood.values[i] = likelihood(cat, X[i], applicable_rows, D)
   }
-  
+
   results = sqrt(integrate.xy(X, (X - theta.hat)^2*likelihood.values*prior.values) / integrate.xy(X, likelihood.values*prior.values))
   return(results)
-})          
+})
 
 setGeneric("expectedPV", function(cat, item, theta.est, D=1, lowerBound=-4, upperBound=4, quadPoints=33){standardGeneric("expectedPV")})
 setMethod(f="expectedPV", signature=class.name, definition=function(cat, item, theta.est, D=1, lowerBound=-4, upperBound=4, quadPoints=33) {
-  prob.correct = three.pl(cat, theta.est, cat@questions[item,]$difficulty, cat@questions[item,]$discrimination, cat@questions[item,]$guessing, D)
-  prob.incorrect = 1 - prob.correct
+  if (cat@poly) {
+    row.name = item
+    thetas = rep(NA, length(cat@difficulties[row.name]))
+    this.difficulties = cat@difficulties[row.name][[1]]
+    
+    for (i in 1:length(this.difficulties)) {
+      cat@questions[row.name, 'answers'] = i
+      thetas[i] = estimateTheta(cat, D=D, lowerBound=lowerBound, upperBound=upperBound, quadPoints=quadPoints)
+    }
+    cat@questions[row.name, 'answers'] = NA
+    
+    this.question.cdf = three.pl(cat, theta.est, cat@difficulties[[row.name]], cat@questions[row.name, 'discrimination'], cat@questions[row.name, 'guessing'], D)
+    this.question.pdf = c()
+    for (i in 1:length(this.question.cdf)) {
+      if (i == 1) {
+        this.question.pdf[i] = this.question.cdf[i]
+      } else if (i == length(this.question.cdf)) {
+        this.question.pdf[i] = 1 - this.question.cdf[i]
+      } else {
+        this.question.pdf[i] = this.question.cdf[i] - this.question.pdf[i-1]
+      }
+    }
+    return (sum(thetas * this.question.pdf))
+  } else {
+    prob.correct = three.pl(cat, theta.est, cat@questions[item,]$difficulty, cat@questions[item,]$discrimination, cat@questions[item,]$guessing, D)
+    prob.incorrect = 1 - prob.correct
   
-  old_val = cat@questions[item, 'answers']
+    old_val = cat@questions[item, 'answers']
   
-  cat@questions[item, 'answers'] = 1
-  theta.correct = estimateTheta(cat, D=D, lowerBound=lowerBound, upperBound=upperBound, quadPoints=quadPoints)
-  variance.correct = estimateSE(cat, theta.correct, D=D, lowerBound=lowerBound, upperBound=upperBound, quadPoints=quadPoints)^2
+    cat@questions[item, 'answers'] = 1
+    theta.correct = estimateTheta(cat, D=D, lowerBound=lowerBound, upperBound=upperBound, quadPoints=quadPoints)
+    variance.correct = estimateSE(cat, theta.correct, D=D, lowerBound=lowerBound, upperBound=upperBound, quadPoints=quadPoints)^2
   
-  cat@questions[item, 'answers'] = 0
-  theta.incorrect = estimateTheta(cat, D=D, lowerBound=lowerBound, upperBound=upperBound, quadPoints=quadPoints)
-  variance.incorrect = estimateSE(cat, theta.incorrect, D=D, lowerBound=lowerBound, upperBound=upperBound, quadPoints=quadPoints)^2
+    cat@questions[item, 'answers'] = 0
+    theta.incorrect = estimateTheta(cat, D=D, lowerBound=lowerBound, upperBound=upperBound, quadPoints=quadPoints)
+    variance.incorrect = estimateSE(cat, theta.incorrect, D=D, lowerBound=lowerBound, upperBound=upperBound, quadPoints=quadPoints)^2
   
-  cat@questions[item, 'answers'] = if (is.null(old_val) || is.na(old_val)) NA else old_val
+    cat@questions[item, 'answers'] = if (is.null(old_val) || is.na(old_val)) NA else old_val
   
-  return(prob.correct*variance.correct + prob.incorrect*variance.incorrect)
+    return(prob.correct*variance.correct + prob.incorrect*variance.incorrect)
+  }
 })
 
 setGeneric("nextItem", function(cat, theta.est=NA, D=1, lowerBound=-4, upperBound=4, quadPoints=33){standardGeneric("nextItem")})
 setMethod(f="nextItem", signature=class.name, definition=function(cat, theta.est=NA, D=1, lowerBound=-4, upperBound=4, quadPoints=33) {
-  available_questions = cat@questions[!(cat@questions$answers %in% c(0, 1)), ]
-  
+  available_questions = cat@questions[is.na(cat@questions$answers), ]
+
   if (is.na(theta.est)) {
     theta.est = estimateTheta(cat, D=D, lowerBound=lowerBound, upperBound=upperBound, quadPoints=quadPoints)
   }
+  
   available_questions$epv = NA
   for (i in 1:nrow(available_questions)) {
-    available_questions[i,]$epv = expectedPV(cat, as.numeric(row.names(available_questions[i,])), theta.est)
+    available_questions[i,]$epv = expectedPV(cat, row.names(available_questions[i,]), theta.est)
   }
-  
-  next.item = available_questions[available_questions$epv == min(available_questions$epv), ]
-  to.return = list(all.estimates=available_questions, next.item=row.names(next.item))
-  
+
+  next.item = available_questions[available_questions$epv == min(available_questions$epv, na.rm=TRUE), ]
+  to.return = list(all.estimates=available_questions, next.item=row.names(next.item)[1])
+
   return(to.return)
 })
 
@@ -139,16 +194,13 @@ setMethod(f="debugNextItem", signature=class.name, definition=function(cat, thet
   if (is.na(theta.est)) {
     theta.est = estimateTheta(cat, D=D, lowerBound=lowerBound, upperBound=upperBound, quadPoints=quadPoints)
   }
-  
+
   next.item = nextItem(cat, theta.est, D=D, lowerBound=lowerBound, upperBound=upperBound, quadPoints=quadPoints)
-  
+
   plot(next.item$all.estimates$difficulty, next.item$all.estimates$epv, type="n", xlab="Difficulty", ylab="EPV")
   lines(next.item$all.estimates$difficulty, next.item$all.estimates$epv)
   segments(theta.est, 0, theta.est, 10, lty=2)
   points(next.item$all.estimates[next.item$next.item,]$difficulty, next.item$all.estimates[next.item$next.item,]$epv, col="red")
-  
-  return(next.item)
-})         
 
-# Add a real constructor, silly S4
-CATsurv = function(...) new("CATsurv",...)
+  return(next.item)
+})

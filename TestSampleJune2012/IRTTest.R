@@ -20,8 +20,8 @@ use.these <- c(1804:1835, 1837:1868, 1708:1710, 1712:1744, 1746:1753, 1755:1772,
 theseAreStatic <- c(1708:1710, 1712:1744, 1746:1753, 1755:1772, 1774:1775)
 theseAreDyn <- c(1804:1835, 1837:1868)
 
-theseAreOutcomesDyn <- c(1657:1669)
-theseAreOutcomesStatic <- c(1757:1769)
+theseAreOutcomes <- c(1685:1699)
+
 
 
 ## Recode NAs to 0s for knowledge questions
@@ -42,8 +42,8 @@ dynResultsRaw <- dynResultsRaw[,!colnames(testData) %in% paste("question_", thes
 staticResultsRaw <- staticResultsRaw[,!colnames(testData) %in% paste("question_", theseAreDyn, sep="")]
 
 # Make outcome data for regressions at the bottom
-statOut <- staticResultsRaw[,colnames(staticResultsRaw) %in% paste("question_", theseAreOutcomesStatic, sep="")]
-dynOut <- dynResultsRaw[,colnames(dynResultsRaw) %in% paste("question_", theseAreOutcomesDyn, sep="")]
+statOut <- staticResultsRaw[,colnames(staticResultsRaw) %in% paste("question_", theseAreOutcomes, sep="")]
+dynOut <- dynResultsRaw[,colnames(dynResultsRaw) %in% paste("question_", theseAreOutcomes, sep="")]
 
 ## Rename columns in static file
 colnames(dynResultsRaw)[colnames(dynResultsRaw)%in%paste("question_", theseAreDyn, sep="")] <- paste("q", 1:64, sep="")
@@ -384,6 +384,63 @@ var(statRes5$theta.est)
 
 
 ## Here is where we can run some regressions or something
+library(car)
+
+
+# Re-scale the political knowledge scale so it is between 0 and 1
 dynOut <- cbind(dynOut,dynRes5$theta.est)
-statOutt <- cbind(statOut, statRes5$theta.est)
+statOut <- cbind(statOut, statRes5$theta.est)
+colnames(dynOut)[16] <- colnames(statOut)[16] <- "know"
+statOut$know <- (statOut$know-min(statOut$know))/(max(statOut$know)-min(statOut$know))
+dynOut$know <- (dynOut$know-min(dynOut$know))/(max(dynOut$know)-min(dynOut$know))
+hist(statOut$know)
+
+for (i in c(1685:1694, 1698, 1699)){
+ this <- paste("question_", i, sep="")
+ dynOut[,this] <-  recode(dynOut[,this], "2=0")
+ statOut[,this] <-  recode(statOut[,this], "2=0")
+  
+}
+
+
+# Make an index of 
+bothOut <- rbind(dynOut, statOut)
+
+these.ones <- c(1:10)
+ltm.part <- ltm(bothOut[,these.ones]~z1, IRT.param=TRUE)
+
+scores <- factor.scores(ltm.part, dynOut[,these.ones])
+dynOut$partScore <- scores$score.dat$z1
+
+scores <- factor.scores(ltm.part, statOut[,these.ones])
+statOut$partScore <- scores$score.dat$z1
+
+#sum
+dynOut$sumPart <- rowSums(dynOut[,1:10])
+statOut$sumPart <- rowSums(statOut[,1:10])
+
+
+## ehh..not super strong
+summary(lm(sumPart~know, data=dynOut))
+summary(lm(sumPart~know, data=statOut))
+
+summary(lm(partScore~know, data=dynOut))
+summary(lm(partScore~know, data=statOut))
+
+
+
+############## These ones in the paper
+
+summary(lm(question_1695~know, data=dynOut))
+summary(lm(question_1695~know, data=statOut))
+
+summary(lm(question_1696~know, data=dynOut))
+summary(lm(question_1696~know, data=statOut))
+
+summary(lm(question_1697~know, data=dynOut))
+summary(lm(question_1697~know, data=statOut))
+
+
+
+
 
