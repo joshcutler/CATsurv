@@ -56,13 +56,13 @@ setMethod(f="likelihood", signature=class.name, definition=function(cat, theta, 
     for (question in rownames(items)) {
       this.question.cdf = three.pl(cat, theta, cat@difficulties[[question]], items[question, 'discrimination'], items[question, 'guessing'], D)
       this.question.pdf = c()
-      for (i in 1:length(this.question.cdf)) {
+      for (i in 1:(length(this.question.cdf) + 1)) {
         if (i == 1) {
           this.question.pdf[i] = this.question.cdf[i]
-        } else if (i == length(this.question.cdf)) {
-          this.question.pdf[i] = 1 - this.question.cdf[i]
+        } else if (i == (length(this.question.cdf) + 1)) {
+          this.question.pdf[i] = 1 - this.question.cdf[i - 1]
         } else {
-          this.question.pdf[i] = this.question.cdf[i] - this.question.pdf[i-1]
+          this.question.pdf[i] = this.question.cdf[i] - this.question.cdf[i - 1]
         }
       }
       L = L * this.question.pdf[items[question, 'answers']]
