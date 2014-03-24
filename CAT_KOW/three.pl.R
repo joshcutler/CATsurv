@@ -1,4 +1,4 @@
-#' Three-Parameter IRT Model
+#' Computerized Adaptive Testing Survey Probability Function
 #'
 #' This function returns the probability a correct response for each respondent \eqn{j} on item \eqn{i}.
 #'
