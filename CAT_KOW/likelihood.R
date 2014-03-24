@@ -1,14 +1,14 @@
-#' Title
+#' Computerized Adaptive Testing Survey Likelihood Function
 #'
-#' Definition
+#' This function returns the value of likelihood funtion asscociated with the responses to the first \eqn{k-1} items under a local independence assumption.
 #'
-#' @param cat 
-#' @param theta
-#' @param items
-#' @param D
+#' @param cat an object of class \code{CATsurv}.
+#' @param theta vector consisting of each respondent's position on the latent scale of interest
+#' @param items data frame containing discrimination parameter, guessing parameter, difficulty parameter, and answer for each item, 
+#' @param D model parameter. 1 is for a logistic model and 1.702 for an approximation of the probit model. The default value is 1.
 #'
 #' @return An object of class CATsurv containing
-#'  \item{L}{ }
+#'  \item{L}{The value of likelihood function}
 #'  
 #' @author Josh W. Cutler and Jacob M. Montgomery
 
