@@ -7,7 +7,7 @@
 #' @param difficulty vector consisting of difficulty parameter for each item.
 #' @param discrimination vector consisting of discrimination parameter for each item.
 #' @param guessing vector consisting of guessing parameter for each item . 
-#' @param D a model parameter number. 1 is for a logistic model and 1.702 for an approximation of the probit model. The default value is 1. 
+#' @param D model parameter. 1 is for a logistic model and 1.702 for an approximation of the probit model. The default value is 1. 
 #'
 #' @return An object of class CATsurv containing
 #'  \item{prob}{The probability of a correct response for each individual}
