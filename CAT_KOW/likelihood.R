@@ -4,7 +4,7 @@
 #'
 #' @param cat an object of \code{CATsurv} class.
 #' @param theta vector consisting of each respondent's position on the latent scale of interest
-#' @param items data frame containing discrimination parameter, guessing parameter, difficulty parameter, and answer for each item, 
+#' @param item-level parameters data frame containing discrimination parameter, guessing parameter, difficulty parameter, and answer for each item, 
 #' @param D model parameter. 1 is for a logistic model and 1.702 for an approximation of the probit model. The default value is 1.
 #'
 #' @return An object of class \code{CATsurv} containing
