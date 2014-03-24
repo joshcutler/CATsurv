@@ -15,7 +15,7 @@
 #' @details The probability of a correct response for respondent \eqn{j} on item \eqn{i} is \deqn{Pr(y_{ij}=1|\theta_j)=c+(1-c)\frac{\exp(Da_i(\theta_j-b_i))}{1+\exp(Da_i(\theta_j-b_i))}} where \theta_j is respondent \eqn{j}'s position on the latent scale of interest, \eqn{a_i} is item \eqn{i}'s discrimination parameter, \eqn{b_i} is item \eqn{i}'s difficulty parameter, and \eqn{c_i} is item \eqn{i}'s guessing parameter.
 #'
 #' @author Josh W. Cutler and Jacob M. Montgomery
-#' @seealso \code{\link{likelihood}},\code{\link{prior}}, \code{\link{estimateTheta}}, \code{\link{estimateSE}}, \code{\link{expectedPV}}, \code{\link{nextItem}}, \code{\link{storeAnswer}}, \code{\link{debugNextItem}}
+#' @seealso \code{\link{likelihood}},\code{\link{prior.value}}, \code{\link{estimateTheta}}, \code{\link{estimateSE}}, \code{\link{expectedPV}}, \code{\link{nextItem}}, \code{\link{storeAnswer}}, \code{\link{debugNextItem}}
 #' @rdname three.pl
 #' @export
 setGeneric("three.pl", function(cat, theta, difficulty, discrimination, guessing, D=1){standardGeneric("three.pl")})
