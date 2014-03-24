@@ -2,12 +2,12 @@
 #'
 #' This function returns the value of likelihood funtion asscociated with the responses to the first \eqn{k-1} items under a local independence assumption.
 #'
-#' @param cat an object of class \code{CATsurv}.
+#' @param cat an object of \code{CATsurv} class.
 #' @param theta vector consisting of each respondent's position on the latent scale of interest
 #' @param items data frame containing discrimination parameter, guessing parameter, difficulty parameter, and answer for each item, 
 #' @param D model parameter. 1 is for a logistic model and 1.702 for an approximation of the probit model. The default value is 1.
 #'
-#' @return An object of class CATsurv containing
+#' @return An object of class \code{CATsurv} containing
 #'  \item{L}{The value of likelihood function}
 #'  
 #' @details Letting \eqn{q_i(\theta_j)=1-p_i(\theta_j)}, the likelihood function associated with the responses to the first \eqn{k-1} items under a local independence assumption is \deqn{L(\theta_j|\mathbf{y}_{k-1,j})=\prod^{k-1}_{i=1}p_i(\theta_j)^{Y_{ij}}q_i(\theta_j)^{(1-y_{ij}}}.
