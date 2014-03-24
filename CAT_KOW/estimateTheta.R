@@ -1,6 +1,6 @@
 #' Computerized Adaptive Testing Survey Estimating Each Respondent's Position on the Latent Scale of Interest
 #'
-#' This function returns the expected \emph{a posterior} (EAP) estimate of each respondent's popsition on the latent scale. 
+#' This function returns the expected \emph{a posteriori} (EAP) estimate of each respondent's popsition on the latent scale. 
 #'
 #' @param cat an object of \code{CATsurv} class.
 #' @param D model parameter. \code{1} is for a logistic model and \code{1.702} for an approximation of the probit model. The default value is 1.
