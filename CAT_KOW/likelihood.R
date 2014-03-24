@@ -13,7 +13,7 @@
 #' @details Letting \eqn{q_i(\theta_j)=1-p_i(\theta_j)}, the likelihood function associated with the responses to the first \eqn{k-1} items under a local independence assumption is \deqn{L(\theta_j|\mathbf{y}_{k-1,j})=\prod^{k-1}_{i=1}p_i(\theta_j)^{Y_{ij}}q_i(\theta_j)^{(1-y_{ij}}}.
 #'
 #' @author Josh W. Cutler and Jacob M. Montgomery
-#' @seealso \code{\link{likelihood}},\code{\link{prior}}, \code{\link{estimateTheta}}, \code{\link{estimateSE}}, \code{\link{expectedPV}}, \code{\link{nextItem}}, \code{\link{storeAnswer}}, \code{\link{debugNextItem}}
+#' @seealso \code{\link{three.pl}},\code{\link{prior.value}}, \code{\link{estimateTheta}}, \code{\link{estimateSE}}, \code{\link{expectedPV}}, \code{\link{nextItem}}, \code{\link{storeAnswer}}, \code{\link{debugNextItem}}
 #' @rdname likelihood
 
 #' @export
