@@ -2,12 +2,12 @@
 #'
 #' This function returns the probability a correct response for each individual.
 #'
-#' @param cat 
+#' @param cat an object of \code{CATsurv} class.
 #' @param theta vector of each respondent's position on the latent scale of interest.
 #' @param difficulty an item difficulty parameter number.
 #' @param discrimination an item discrimination parameter number.
 #' @param guessing an item guessability parameter number. 
-#' @param D a model parameter number. 1 is for a logistic model and 1.702 for an approximation of the probit model. The defaulat value is 1. 
+#' @param D a model parameter number. 1 is for a logistic model and 1.702 for an approximation of the probit model. The default value is 1. 
 #'
 #' @return An object of class CATsurv containing
 #'  \item{prob}{The probability of a correct response for each individual}
