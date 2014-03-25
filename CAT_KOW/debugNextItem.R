@@ -1,20 +1,21 @@
-#' Title
+#' Computerized Adaptive Testing Survey Debug Next Item Function
 #'
-#' Definition
+#' This function enables user to debug a next item based on an estimate of a respondent's position by plotting difficulty of next item with respect to its expected posterior variance.
 #'
-#' @param cat
-#' @param theta.est
-#' @param D
-#' @param lowerBound
-#' @param upperBound
-#' @param quadPoints 
-#' @param answer
+#' @param cat An object of class \code{CATsurv}
+#' @param theta.est A scalar value to contain an estimate of a respondent's position on the latent trait, using the \code{\link{estimateTheta}} funciton. Defaults to NA.
+#' @param D A numeric value used as model parameter.  For logit models, set D=1.  For an approximation of the probit model, set D=1.702.  Defaults to D=1. 
+#' @param D A numeric value used as model parameter.  For logit models, set D=1.  For an approximation of the probit model, set D=1.702.  Defaults to D=1.   
+#' @param lowerBound The lower bound of the interval of the latent trait used in estimation.  Defaults to -4.
+#' @param upperBound The upper bound of the interval of the latent trait used in estimation.  Defaults to 4.
+#' @param quadPoints The number of points used in approximating the integral.  Defaults to 33.
+#' @param answer The answer to the item \emph{k} to be stored
 #'
-#' @return An object of class CATsurv containing
-#'  \item{next.item}{ }
+#' @return A next item to be asked based on the estimate of a respondent's position on the latent trait
 #'  
-#' @author Josh W. Cutler and Jacob M. Montgomery
-
+#' @author Josh W. Cutler: \email{josh@@zistle.com} and Jacob M. Montgomery: \email{jacob.montgomery@@wustl.edu}
+#' @seealso \code{\link{three.pl}},\code{\link{likelihood}}, \code{\link{prior.value}}, \code{\link{estimateTheta}}, \code{\link{estimateSE}}, \code{\link{expectedPV}},  \code{\link{nextItem}}, \code{\link{storeAnswer}}
+#' @rdname debugNextItem
 #' @export
 setGeneric("debugNextItem", function(cat, theta.est=NA, D=1, lowerBound=-4, upperBound=4, quadPoints=33){standardGeneric("debugNextItem")})
 
