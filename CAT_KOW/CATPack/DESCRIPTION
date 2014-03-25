@@ -1,0 +1,13 @@
+Package: CATPack
+Title: Computerized Adaptive Testing Survey Package
+Description: Computerized Adaptive Testing Survey Package allows users to
+    perform CAT surveys by providing functions which facilitate choosing proper
+    items to ask respondents and recording answers as they are given.
+Version: 0.1
+Author: Josh Cutler and Jacob Montgomery
+Maintainer: Josh Cutler <josh@zistle.com>
+Depends:
+    R (>= 3.0.0),
+    sfsmisc
+License: GPL (>=2)
+LazyData: true
