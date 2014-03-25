@@ -15,7 +15,7 @@
 #' @details The standard error of the expected \emph{a posteriori} (EAP) estimate of respondent \eqn{j}'s position on the latent scale is calculated as the square root of \deqn{E((\theta_j-\hat{\theta_j}^{(\text{EAP})})^2|\mathbf{y}_{k-1,j})=\frac{\int(\theta_j-\hat{\theta_j}^{(\text{EAP})})^2\pi(\theta_j)L(\theta_j|\mathbf{y}_{k-1,j}d\theta_j}{\int\pi(\theta_j)L(\theta_j|\mathbf{y}_{k-1,j})d\theta_j}}.
 #'  
 #' @author Josh W. Cutler: \email{josh@@zistle.com} and Jacob M. Montgomery: \email{jacob.montgomery@@wustl.edu}
-#' @seealso \code{\link{three.pl}},\code{\link{likelihood}}, \code{\link{prior.value}}, \code{\link{estimateSE}}, \code{\link{expectedPV}}, \code{\link{nextItem}}, \code{\link{storeAnswer}}, \code{\link{debugNextItem}}
+#' @seealso \code{\link{three.pl}},\code{\link{likelihood}}, \code{\link{prior.value}}, \code{\link{estimateTheta}}, \code{\link{expectedPV}}, \code{\link{nextItem}}, \code{\link{storeAnswer}}, \code{\link{debugNextItem}}
 #' @rdname estimateSE
 #' @export
 setGeneric("estimateSE", function(cat, theta.hat, D=1, priorName=NULL, priorParams=NULL, lowerBound=-4, upperBound=4, quadPoints=33, ...){standardGeneric("estimateSE")})
