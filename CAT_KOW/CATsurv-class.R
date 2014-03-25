@@ -4,11 +4,11 @@
 #'
 #' An object of the class `CATsurv' has the following slots:
 #' \itemize{
-#' \item \code{questions} A data-frame where the rows represent the questions used in the CAT, and the columns contain information about each question.  See the details section for more information.  
-#' \item \code{difficulties} A named vector of difficulty parameters for use with polytomous questions.  Each element's name tells the question to which it applies.  This slot \emph{must} be filled if \code{poly=TRUE}.    
+#' \item \code{questions} A data-frame where the rows represent the questions/items used in the CAT, and the columns contain information about each question/item.  See the details section for more information.  
+#' \item \code{difficulties} A named vector of difficulty parameters for use with polytomous questions/items.  Each element's name tells the question/item to which it applies.  This slot \emph{must} be filled if \code{poly=TRUE}.    
 #' \item \code{priorName} A character vector of length one giving the prior distribution to use for the latent trait estimates.  The options are \code{normal} for the normal distirbution, \code{cauchy} for the Cauchy distribution, are \code{t} for the t-distribution. Defaults to \code{normal}. 
 #' \item \code{priorParams} A numeric vector of parameters for the distribution specified in the \code{priorName} slot. See the details section for more infomration.  Defaults to \code{c(1,1)}.  
-#' \item \code{poly} A logical, indicating whether or not the questions using in this CAT have dichotomous (FALSE) or polytomous (TRUE) responses.  Defaults to FALSE. 
+#' \item \code{poly} A logical, indicating whether or not the questions/items used in this CAT have dichotomous (FALSE) or polytomous (TRUE) responses.  Defaults to FALSE. 
 #' }
 #'
 #'@details The "questions" data frame \emph{must} contain the following columns: "difficulty", which is a vector of difficulty parameters, one per question (unless poly=TRUE, in which case this column can be ommitted but the slot difficulties must be filled); "discrimination", which is a vector of discrimination parameters, also one per question; "guessing" which is a vector of guessing parameters; "answers" which is a vector of answers to questions as given by the survey respondent.\cr
