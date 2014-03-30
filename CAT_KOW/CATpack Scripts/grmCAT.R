@@ -1,0 +1,40 @@
+#' Computerized Adaptive Testing Graded Response Model
+#'
+#' This function fits the Graded Response model for ordinal polytomous data and populates the fitted values for discimination and difficulty parameters to an object of class \code{PolyCATsurv}.  
+#'
+#' @param data a \code{data.frame} or a numeric \code{matrix} of manifest variables. 
+#' @param object an object of class \code{PolyCATsurv} to be populated. If omitted, a new object of class \code{PolyCATsurv} is created.
+#' @param ... arguments to be passed to methods. For more details about the arguments, see \link{\code{grm}}.
+#'
+#'  @return An object of class \code{PolyCATsurv} with components,
+#' \itemize{
+#' \item \code{difficulty} a named list of difficulty parameters for use with polytomous questions/items.  Each element's name tells the question/item to which it applies.
+#' \item \code{guessing} a vector of guessing parameters 
+#' \item \code{discrimination} a vector of disrimination parameters including a numeric value per question/item.
+#' \item \code{answers} a vector of answers to questions as given by the survey respondent.
+#' \item \code{priorName} a character vector of length one giving the prior distribution to use for the latent trait estimates.  The options are \code{normal} for the normal distirbution, \code{cauchy} for the Cauchy distribution, are \code{t} for the t-distribution. Defaults to \code{normal}. 
+#' \item \code{priorParams} a numeric vector of parameters for the distribution specified in the \code{priorName} slot. See the details section for more infomration.  Defaults to \code{c(1,1)}.   
+#' }
+#' @author Josh W. Cutler: \email{josh@@zistle.com} and Jacob M. Montgomery: \email{jacob.montgomery@@wustl.edu}
+#' @seealso \code{\link{ltmCAT}}, \code{\link{three.pl}},\code{\link{likelihood}}, \code{\link{prior.value}}, \code{\link{estimateTheta}}, \code{\link{estimateSE}}, \code{\link{expectedPV}},  \code{\link{storeAnswer}}, \code{\link{debugNextItem}}
+#' @rdname grmCAT
+#' @export
+setGeneric("grmCAT", function(data, object=NULL, ...){standardGeneric("grmCAT")})
+
+#' @export
+setMethod(f="grmCAT", signature="data.frame", 
+          definition=function(data, object,...){
+          if(!is.null(object)) if(class(object)!="PolyCATsurv") stop("object is not class PolyCATsurv")            
+          fit <- grm(data=data)
+          coefficient <- coef(fit)
+          discrimination <- coefficient[,"Dscrmn"]
+          difficulty <- lapply(1:nrow(coefficient), function(i) coefficient[i,-ncol(coefficient)])
+          names(difficulty) <- rownames(coefficient)
+          if(is.null(object)){
+          return(new("PolyCATsurv", discrimination=discrimination, difficulty=difficulty))
+          } else {
+          object@discrimination <- discrimination
+          object@difficulty <- difficulty
+          return(object)
+          }
+})
