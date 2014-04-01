@@ -3,6 +3,11 @@
 #' This function returns the probability of a correct response for each respondent on item \eqn{i}.
 #'
 #' @param cat an object of \code{CATsurv} class.
+#' @param theta vector consisting of each respondent's position on the latent scale of interest.
+#' @param difficulty vector consisting of difficulty parameter for each item.
+#' @param discrimination vector consisting of discrimination parameter for each item.
+#' @param guessing vector consisting of guessing parameter for each item . 
+#' @param D model parameter. 1 is for a logistic model and 1.702 for an approximation of the probit model. The default value is 1. 
 #'
 #' @return A vector consisting of the probability of a correct response for each respondent on item \eqn{i}.
 #'
@@ -12,10 +17,10 @@
 #' @seealso \code{\link{likelihood}},\code{\link{prior.value}}, \code{\link{estimateTheta}}, \code{\link{estimateSE}}, \code{\link{expectedPV}}, \code{\link{nextItem}}, \code{\link{storeAnswer}}, \code{\link{debugNextItem}}
 #' @rdname three.pl
 #' @export
-setGeneric("three.pl", function(cat){standardGeneric("three.pl")})
+setGeneric("three.pl", function(cat, theta, difficulty, discrimination, guessing, D=1){standardGeneric("three.pl")})
 
 #' @export 
-setMethod(f="three.pl", signature="CATsurv", definition=function(cat) {
-  exp.portion = exp(cat@D*cat@discrimination*(cat@theta - cat@difficulty))
-  prob = cat@guessing + (1 - cat@guessing)*(exp.portion / (1 + exp.portion))
+setMethod(f="three.pl", signature="CATsurv", definition=function(cat, theta, difficulty, discrimination, guessing, D=1) {
+  exp.portion = exp(D*discrimination*(theta - difficulty))
+  prob = guessing + (1 - guessing)*(exp.portion / (1 + exp.portion))
 })
