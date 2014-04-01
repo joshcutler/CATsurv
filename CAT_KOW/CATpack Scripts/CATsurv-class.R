@@ -19,7 +19,6 @@
 #' @aliases CATsurv-class initialize,CATsurv-method
 #' @rdname CATsurv
 #' @export
-library(sfsmisc) ####PUT THIS AS A DEPENDS IN THE DESCRIPTION 
 
 class.name = "CATsurv"
 setClass(class.name,

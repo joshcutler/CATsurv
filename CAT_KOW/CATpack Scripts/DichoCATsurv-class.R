@@ -22,7 +22,6 @@
 #' @aliases DichoCATsurv-class initialize, DichoCATsurv-method
 #' @rdname DichoCATsurv
 #' @export
-library(sfsmisc) ####PUT THIS AS A DEPENDS IN THE DESCRIPTION 
 
 class.name = "DichoCATsurv"
 setClass(class.name,

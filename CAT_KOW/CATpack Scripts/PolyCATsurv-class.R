@@ -22,7 +22,6 @@
 #' @aliases PolyCATsurv-class initialize, PolyCATsurv-method
 #' @rdname PloyCATsurv
 #' @export
-library(sfsmisc) ####PUT THIS AS A DEPENDS IN THE DESCRIPTION 
 
 class.name = "PolyCATsurv"
 setClass(class.name,
