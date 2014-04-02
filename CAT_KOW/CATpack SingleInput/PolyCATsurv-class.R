@@ -1,0 +1,67 @@
+#'@include CATsurv-class.R
+#'
+#' A Computerized Adaptive Testing Survey (CATsurv) Object
+#' 
+#' Objects of class \code{PolyCATsurv} are used in administering Computerized Adaptive Testing (CAT) Surveys containing questions with polytomous answers. These objects contain several pieces of information relevent for CAT surveys, and are used as input in the main functions of the \code{CATsurv} package, \code{\link{nextItem}} and \code{\link{storeAnswer}}. They are created using the \code{initialize} function.      
+#'
+#' An object of the sub-class `PolyCATsurv' of class \code{CATsurv} has the following slots:
+#' \itemize{
+#' \item \code{difficulty} A named list of difficulty parameters for use with polytomous questions/items.  Each element's name tells the question/item to which it applies.
+#' \item \code{guessing} A vector of guessing parameters 
+#' \item \code{discrimination} A vector of disrimination parameters including a numeric value per question/item.
+#' \item \code{answers} A vector of answers to questions as given by the survey respondent.
+#' \item \code{priorName} A character vector of length one giving the prior distribution to use for the latent trait estimates.  The options are \code{normal} for the normal distirbution, \code{cauchy} for the Cauchy distribution, are \code{t} for the t-distribution. Defaults to \code{normal}. 
+#' \item \code{priorParams} A numeric vector of parameters for the distribution specified in the \code{priorName} slot. See the details section for more infomration.  Defaults to \code{c(1,1)}.   
+#' }
+#'
+#'@details When priorName is set to "normal", the first priorParam is the mean, the second is the standard deviation.  When priorName is set to "Cauchy", the first priorParam is the location, and the second is the scale.  When priorName is set to "t", the first priorParam is mu, a location parameter, the second is sigma, a scale parameter, and the third is nu, the degrees of freedom parameter.   
+#'
+#' @author Josh W. Cutler: \email{josh@@zistle.com} and Jacob M. Montgomery: \email{jacob.montgomery@@wustl.edu}
+#' @seealso \code{\link{nextItem}}
+#' @seealso \code{\link{storeAnswer}}
+#' @aliases PolyCATsurv-class initialize, PolyCATsurv-method
+#' @rdname PloyCATsurv
+#' @export
+
+class.name = "PolyCATsurv"
+setClass(class.name,
+         contains="CATsurv",
+         representation=representation(
+           difficulty="list"
+         ),
+         prototype=prototype(
+           priorName="normal",
+           priorParams=c(1,1),
+           lowerBound=-4.5,
+           upperBound=4.5,
+           quadPoints=43,
+           D=1
+         )
+)
+
+#' @export
+setMethod("initialize", class.name, function(.Object, ...) {
+  value = callNextMethod()
+  value@X <- seq(from=value@lowerBound,to=value@upperBound,length=value@quadPoints)
+  validObject(value)
+  return(value)
+})
+
+##
+setAs(from="CATsurv", to="PolyCATsurv",
+      def=function(from){
+        new("PolyCATsurv",
+            guessing=from@guessing,
+            discrimination=from@discrimination,
+            answers=from@answers,
+            priorName=from@priorName,
+            priorParams=from@priorParams,
+            lowerBound=from@lowerBound,
+            upperBound=from@upperBound,
+            quadPoints=from@quadPoints,
+            D=from@D,
+            X=from@X,
+            Theta.est=from@Theta.est
+        )
+      }
+)
