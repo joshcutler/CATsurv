@@ -24,19 +24,21 @@ setGeneric("grmCAT", function(data, object=NULL, ...){standardGeneric("grmCAT")}
 #' @export
 setMethod(f="grmCAT", signature="data.frame", 
           definition=function(data, object,...){
-          if(!is.null(object)) if(class(object)!="CATsurv") stop("object is not class CATsurv")            
-          fit <- grm(data=data)
-          coefficient <- coef(fit)
-          discrimination <- coefficient[,"Dscrmn"]
-          difficulty <- lapply(1:nrow(coefficient), function(i) coefficient[i,-ncol(coefficient)])
-          names(difficulty) <- rownames(coefficient)
-          if(is.null(object)){
-          return(new("CATsurv", discrimination=discrimination, difficulty=difficulty, poly=TRUE, guessing=0))
-          } else {
-          object@discrimination <- discrimination
-          object@difficulty <- difficulty
-          object@poly <- TRUE
-          object@guessing <- 0
-          return(object)
-          }
-})
+            if(!is.null(object)) if(class(object)!="CATsurv") stop("object is not class CATsurv")            
+            fit <- grm(data=data)
+            coefficient <- coef(fit)
+            answer <- rep(NA,nrow(coefficient))
+            discrimination <- coefficient[,"Dscrmn"]
+            difficulty <- lapply(1:nrow(coefficient), function(i) coefficient[i,-ncol(coefficient)])
+            names(difficulty) <- rownames(coefficient)
+            if(is.null(object)){
+              return(new("CATsurv", discrimination=discrimination, difficulty=difficulty, poly=TRUE, guessing=0, answers=answer))
+            } else {
+              object@discrimination <- discrimination
+              object@difficulty <- difficulty
+              object@poly <- TRUE
+              object@guessing <- 0
+              object@answers <- answer
+              return(object)
+            }
+          })
