@@ -3,10 +3,10 @@
 #' This function fits the latent trait model for binary data and populates the fitted values for discimination and difficulty parameters to an object of class \code{DichoCATsurv}.  
 #'
 #' @param data a \code{data.frame} or a numeric \code{matrix} of manifest variables. 
-#' @param object an object of class \code{PolyCATsurv} to be populated. If omitted, a new object of class \code{DichoCATsurv} is created.
+#' @param object an object of class \code{CATsurv} to be populated. If omitted, a new object of class \code{CATsurv} is created.
 #' @param ... arguments to be passed to methods. For more details about the arguments, see \link{\code{ltm}}.
 #'
-#'  @return An object of class \code{PolyCATsurv} with components,
+#'  @return An object of class \code{CATsurv} with components,
 #' \itemize{
 #' \item \code{difficulty} a named vector of difficulty parameters for use with dichotomous questions/items.  Each element's name tells the question/item to which it applies.
 #' \item \code{guessing} a vector of guessing parameters 
@@ -24,14 +24,14 @@ setGeneric("ltmCAT", function(data, object=NULL, ...){standardGeneric("ltmCAT")}
 #' @export
 setMethod(f="ltmCAT", signature="data.frame", 
           definition=function(data, object,...){
-          if(!is.null(object)) if(class(object)!="DichoCATsurv") stop("object is not class DichoCATsurv")            
+          if(!is.null(object)) if(class(object)!="CATsurv") stop("object is not class CATsurv")            
           fit <- ltm(data~z1)
           coefficient <- coef(fit)
           discrimination <- coefficient[,"Dscrmn"]
           difficulty <- coefficient[,"Dffclt"]
           names(difficulty) <- rownames(coefficient)
           if(is.null(object)){
-          return(new("DichoCATsurv", discrimination=discrimination, difficulty=difficulty))
+          return(new("CATsurv", discrimination=discrimination, difficulty=difficulty))
           } else {
           object@discrimination <- discrimination
           object@difficulty <- difficulty
