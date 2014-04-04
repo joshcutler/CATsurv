@@ -42,7 +42,7 @@ setClass("CATsurv",
          ),
          prototype=prototype(
            priorName="normal",
-           priorParams=c(1,1),
+           priorParams=c(0,1),
            lowerBound=-4.5,
            upperBound=4.5,
            quadPoints=43,
