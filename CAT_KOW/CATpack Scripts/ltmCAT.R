@@ -27,16 +27,18 @@ setMethod(f="ltmCAT", signature="data.frame",
             if(!is.null(object)) if(class(object)!="CATsurv") stop("object is not class CATsurv")            
             fit <- tpm(data)
             coefficient <- coef(fit)
+            answer <- rep(NA,nrow(coefficient))
             discrimination <- coefficient[,"Dscrmn"]
             difficulty <- coefficient[,"Dffclt"]
             guessing <- coefficient[,"Gussng"]
             names(difficulty) <- rownames(coefficient)
             if(is.null(object)){
-              return(new("CATsurv", discrimination=discrimination, difficulty=difficulty, guessing=guessing))
+              return(new("CATsurv", discrimination=discrimination, difficulty=difficulty, guessing=guessing, answers=answer))
             } else {
               object@discrimination <- discrimination
               object@difficulty <- difficulty
               object@guessing <- guessing
+              object@answers <- answer
               return(object)
             }
           })
