@@ -19,7 +19,7 @@ setGeneric("nextItem", function(cat){standardGeneric("nextItem")})
 
 #' @export
 setMethod(f="nextItem", signature=class.name, definition=function(cat) {
-  available_questions = data.frame(questions=which(!is.na(cat@answers)),epv=NA)
+  available_questions = data.frame(questions=which(is.na(cat@answers)),epv=NA)
                                      
     cat@Theta.est = estimateTheta(cat)
 
