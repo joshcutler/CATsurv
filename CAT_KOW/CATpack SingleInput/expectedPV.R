@@ -30,7 +30,7 @@ setMethod(f="expectedPV", signature=class.name, definition=function(cat, item) {
       thetas[i] = estimateTheta(cat)
       variances[i] = estimateSE(cat, thetas[i])^2
     }
-    cat@answer[row.name] = NA
+    cat@answers[row.name] = NA
     
     this.question.cdf = three.pl(cat, cat@Theta.est, cat@difficulty[[row.name]], cat@discrimination[row.name], cat@guessing[row.name])
     this.question.cdf = c(1, this.question.cdf, 0)
