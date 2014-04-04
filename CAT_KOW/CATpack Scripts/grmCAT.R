@@ -3,10 +3,10 @@
 #' This function fits the Graded Response model for ordinal polytomous data and populates the fitted values for discimination and difficulty parameters to an object of class \code{PolyCATsurv}.  
 #'
 #' @param data a \code{data.frame} or a numeric \code{matrix} of manifest variables. 
-#' @param object an object of class \code{PolyCATsurv} to be populated. If omitted, a new object of class \code{PolyCATsurv} is created.
+#' @param object an object of class \code{CATsurv} to be populated. If omitted, a new object of class \code{CATsurv} is created.
 #' @param ... arguments to be passed to methods. For more details about the arguments, see \link{\code{grm}}.
 #'
-#'  @return An object of class \code{PolyCATsurv} with components,
+#'  @return An object of class \code{CATsurv} with components,
 #' \itemize{
 #' \item \code{difficulty} a named list of difficulty parameters for use with polytomous questions/items.  Each element's name tells the question/item to which it applies.
 #' \item \code{guessing} a vector of guessing parameters 
@@ -24,14 +24,14 @@ setGeneric("grmCAT", function(data, object=NULL, ...){standardGeneric("grmCAT")}
 #' @export
 setMethod(f="grmCAT", signature="data.frame", 
           definition=function(data, object,...){
-          if(!is.null(object)) if(class(object)!="PolyCATsurv") stop("object is not class PolyCATsurv")            
+          if(!is.null(object)) if(class(object)!="CATsurv") stop("object is not class CATsurv")            
           fit <- grm(data=data)
           coefficient <- coef(fit)
           discrimination <- coefficient[,"Dscrmn"]
           difficulty <- lapply(1:nrow(coefficient), function(i) coefficient[i,-ncol(coefficient)])
           names(difficulty) <- rownames(coefficient)
           if(is.null(object)){
-          return(new("PolyCATsurv", discrimination=discrimination, difficulty=difficulty))
+          return(new("CATsurv", discrimination=discrimination, difficulty=difficulty))
           } else {
           object@discrimination <- discrimination
           object@difficulty <- difficulty
