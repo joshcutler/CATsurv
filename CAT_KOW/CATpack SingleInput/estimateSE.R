@@ -21,7 +21,7 @@
 setGeneric("estimateSE", function(cat, theta.hat,...){standardGeneric("estimateSE")})
 
 #' @export
-setMethod(f="estimateSE", signature=class.name, definition=function(cat, theta.hat...) {
+setMethod(f="estimateSE", signature=class.name, definition=function(cat, theta.hat,...) {
   applicable_rows =   applicable_rows = which(!is.na(cat@answers))
   
   prior.values = prior(cat, cat@X, cat@priorName, cat@priorParams)
