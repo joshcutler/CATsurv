@@ -41,7 +41,7 @@ setMethod(f="expectedPV", signature=class.name, definition=function(cat, item) {
     
     return (sum(variances * this.question.pdf))
   } else {
-    prob.correct = three.pl(cat, cat@Theta.est, cat@difficulty[item], cat@discrimination[item], cat@guessing[item,])
+    prob.correct = three.pl(cat, cat@Theta.est, cat@difficulty[item], cat@discrimination[item], cat@guessing[item])
     prob.incorrect = 1 - prob.correct
     
     old_val = cat@answers[item]
