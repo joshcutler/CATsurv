@@ -25,7 +25,7 @@ setMethod(f="expectedPV", signature=class.name, definition=function(cat, item) {
     thetas = rep(NA, length(cat@difficulty[row.name]) + 1)
     variances = rep(NA, length(cat@difficulty[row.name]) + 1)
     
-    for (i in 1:(length(cat@difficulty[[row.name]]))) {
+    for (i in 1:(length(cat@difficulty[[row.name]])+1)) {
       cat@answers[row.name] = i
       thetas[i] = estimateTheta(cat)
       variances[i] = estimateSE(cat, thetas[i])^2
