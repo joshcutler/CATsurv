@@ -26,7 +26,7 @@ setMethod(f="nextItem", signature=class.name, definition=function(cat) {
   
   #available_questions$epv = NA
   for (i in 1:nrow(available_questions)) {
-    available_questions[i,]$epv = expectedPV(cat, available_questions[i,]$questions))
+    available_questions[i,]$epv = expectedPV(cat, available_questions[i,]$questions)
   }
   
   next.item = available_questions[available_questions$epv == min(available_questions$epv, na.rm=TRUE), ]
