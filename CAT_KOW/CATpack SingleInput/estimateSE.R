@@ -30,6 +30,6 @@ setMethod(f="estimateSE", signature=class.name, definition=function(cat, theta.h
     likelihood.values[i] = likelihood(cat, cat@X[i], applicable_rows)
   }
   
-  results = sqrt(integrate.xy(cat@X, (cat@X - theta.hat)^2*likelihood.values*prior.values) / integrate.xy(X, likelihood.values*prior.values))
+  results = sqrt(integrate.xy(cat@X, (cat@X - theta.hat)^2*likelihood.values*prior.values) / integrate.xy(cat@X, likelihood.values*prior.values))
   return(results)
 })
