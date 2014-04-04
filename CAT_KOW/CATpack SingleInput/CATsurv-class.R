@@ -22,11 +22,13 @@
 
 class.name = "CATsurv"
 setClassUnion("numericORlist", c("numeric","list"))
+setClassUnion("logicalORnumeric", c("numeric","logical"))
 
 setClass("CATsurv",
          slots=list(
            guessing="numeric",
            discrimination="numeric",
+           answers="logicalORnumeric",
            answers="numeric",
            priorName="character",
            priorParams="numeric",
@@ -58,8 +60,3 @@ setMethod("initialize", class.name, function(.Object, ...) {
   validObject(value)
   return(value)
 })
-
-cat <- new("DichoCATsurv",guessing=rep(0,14),difficulty=1:14,discrimination=15:28,answers=sample(0:1,14,replace=T))
-is.na(meow@Theta.est)
-meow@answers <- rep(4,14)
-cat@answers[sample(10,3)] <- NA
