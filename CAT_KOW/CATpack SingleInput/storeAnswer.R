@@ -23,5 +23,4 @@ setMethod(f="storeAnswer", signature=class.name, definition=function(cat, item, 
         ,env=parent.frame(1) ) 
     ) 
   ) 
-  return(cat)
 })
