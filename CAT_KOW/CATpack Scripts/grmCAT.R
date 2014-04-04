@@ -31,10 +31,11 @@ setMethod(f="grmCAT", signature="data.frame",
           difficulty <- lapply(1:nrow(coefficient), function(i) coefficient[i,-ncol(coefficient)])
           names(difficulty) <- rownames(coefficient)
           if(is.null(object)){
-          return(new("CATsurv", discrimination=discrimination, difficulty=difficulty))
+          return(new("CATsurv", discrimination=discrimination, difficulty=difficulty, poly=TRUE))
           } else {
           object@discrimination <- discrimination
           object@difficulty <- difficulty
+          object@poly <- TRUE
           return(object)
           }
 })
