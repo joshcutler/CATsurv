@@ -36,7 +36,8 @@ setClass("CATsurv",
            D="numeric",
            X="numeric",
            Theta.est="numeric",
-           difficulty="numericORlist"
+           difficulty="numericORlist",
+           poly="logical"
          ),
          prototype=prototype(
            priorName="normal",
@@ -44,7 +45,8 @@ setClass("CATsurv",
            lowerBound=-4.5,
            upperBound=4.5,
            quadPoints=43,
-           D=1
+           D=1,
+           poly=FALSE
          )
 )
 
