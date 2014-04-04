@@ -21,6 +21,8 @@
 #' @export
 
 class.name = "CATsurv"
+setClassUnion("numericORlist", c("numeric","list"))
+
 setClass("CATsurv",
          slots=list(
            guessing="numeric",
@@ -33,7 +35,8 @@ setClass("CATsurv",
            quadPoints="numeric",
            D="numeric",
            X="numeric",
-           Theta.est="numeric"
+           Theta.est="numeric",
+           difficulty="numericORlist"
          ),
          prototype=prototype(
            priorName="normal",
