@@ -20,7 +20,7 @@ setGeneric("likelihood", function(cat, theta, items){standardGeneric("likelihood
 
 #' @export
 setMethod(f="likelihood", signature=class.name, definition=function(cat, theta, items) {
-  if (class(cat)=="PolyCATsurv") {
+  if (class(cat@difficulty)=="list") {
     probabilities = c()
     L = 1
     for (question in items) {
