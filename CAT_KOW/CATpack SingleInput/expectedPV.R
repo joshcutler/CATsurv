@@ -20,7 +20,7 @@ setGeneric("expectedPV", function(cat, item){standardGeneric("expectedPV")})
 
 #' @export
 setMethod(f="expectedPV", signature=class.name, definition=function(cat, item) {
-  if (class(cat)=="PolyCATsurv") {
+  if (cat@poly) {
     row.name = item
     thetas = rep(NA, length(cat@difficulty[row.name]) + 1)
     variances = rep(NA, length(cat@difficulty[row.name]) + 1)
