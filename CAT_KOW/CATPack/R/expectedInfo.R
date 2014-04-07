@@ -19,7 +19,7 @@ setGeneric("expectedInfo", function(cat, theta, items){standardGeneric("expected
 
 #' @export
 setMethod(f="expectedInfo", signature="CATsurv", definition=function(cat, theta, items) {  
-  num<- (cat@D*(1-cat@guessing)*exp(cat@D*cat@difficulty*(theta-cat@discrimination))/((1-exp(cat@D*cat@difficulty*(theta-cat@discrimination)))^2))^2
+  num<- (cat@D*(1-cat@guessing[items])*exp(cat@D*cat@difficulty[items]*(theta-cat@discrimination[items]))/((1-exp(cat@D*cat@difficulty[items]*(theta-cat@discrimination[items])))^2))^2
   prob.p<- three.pl(cat, theta, cat@difficulty[items], cat@discrimination[items], cat@guessing[items])
   prob.q<- 1-prob.p
   denom<- prob.p*prob.q
