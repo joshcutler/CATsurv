@@ -17,10 +17,12 @@
 #' @seealso \code{\link{likelihood}},\code{\link{prior.value}}, \code{\link{estimateTheta}}, \code{\link{estimateSE}}, \code{\link{expectedPV}}, \code{\link{nextItem}}, \code{\link{storeAnswer}}, \code{\link{debugNextItem}}
 #' @rdname three.pl
 #' @export
-setGeneric("three.pl", function(cat, theta, difficulty, discrimination, guessing, D=1){standardGeneric("three.pl")})
+setGeneric("three.pl", function(cat, theta, difficulty, discrimination, guessing){standardGeneric("three.pl")})
 
 #' @export 
-setMethod(f="three.pl", signature="CATsurv", definition=function(cat, theta, difficulty, discrimination, guessing, D=1) {
-  exp.portion = exp(D*discrimination*(theta - difficulty))
-  prob = guessing + (1 - guessing)*(exp.portion / (1 + exp.portion))
+setMethod(f="three.pl", signature="CATsurv", definition=function(cat, theta, difficulty, discrimination, guessing) {
+if(cat@poly){ prob=1/(1+exp(-discrimination*theta+difficulty)) 
+   } else {
+    exp.portion = exp(cat@D*discrimination*(theta - difficulty))
+  prob = guessing + (1 - guessing)*(exp.portion / (1 + exp.portion))}
 })

@@ -16,7 +16,7 @@
 setGeneric("prior", function(cat, values, name, params){standardGeneric("prior")})
 
 #' @export
-setMethod(f="prior", signature="CATsurv", definition=function(cat, values, name, params) {
+setMethod(f="prior", signature=class.name, definition=function(cat, values, name, params) {
   prior.value = switch(name,
                        normal = dnorm(values, params[1], params[2]),
                        cauchy = dcauchy(values, params[1], params[2]),

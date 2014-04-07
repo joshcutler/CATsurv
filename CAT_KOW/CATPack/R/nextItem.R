@@ -15,19 +15,18 @@
 #' @seealso \code{\link{three.pl}},\code{\link{likelihood}}, \code{\link{prior.value}}, \code{\link{estimateTheta}}, \code{\link{estimateSE}}, \code{\link{expectedPV}},  \code{\link{storeAnswer}}, \code{\link{debugNextItem}}
 #' @rdname nextItem
 #' @export
-setGeneric("nextItem", function(cat, theta.est=NA, D=1, lowerBound=-4, upperBound=4, quadPoints=33){standardGeneric("nextItem")})
+setGeneric("nextItem", function(cat){standardGeneric("nextItem")})
 
 #' @export
-setMethod(f="nextItem", signature="CATsurv", definition=function(cat, theta.est=NA, D=1, lowerBound=-4, upperBound=4, quadPoints=33) {
-  available_questions = cat@questions[is.na(cat@questions$answers), ]
+setMethod(f="nextItem", signature=class.name, definition=function(cat) {
+  available_questions = data.frame(questions=which(is.na(cat@answers)),epv=NA)
+                                     
+    cat@Theta.est = estimateTheta(cat)
+
   
-  if (is.na(theta.est)) {
-    theta.est = estimateTheta(cat, D=D, lowerBound=lowerBound, upperBound=upperBound, quadPoints=quadPoints)
-  }
-  
-  available_questions$epv = NA
+  #available_questions$epv = NA
   for (i in 1:nrow(available_questions)) {
-    available_questions[i,]$epv = expectedPV(cat, row.names(available_questions[i,]), theta.est)
+    available_questions[i,]$epv = expectedPV(cat, available_questions[i,]$questions)
   }
   
   next.item = available_questions[available_questions$epv == min(available_questions$epv, na.rm=TRUE), ]

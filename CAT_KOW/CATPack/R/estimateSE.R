@@ -18,21 +18,18 @@
 #' @seealso \code{\link{three.pl}},\code{\link{likelihood}}, \code{\link{prior.value}}, \code{\link{estimateTheta}}, \code{\link{expectedPV}}, \code{\link{nextItem}}, \code{\link{storeAnswer}}, \code{\link{debugNextItem}}
 #' @rdname estimateSE
 #' @export
-setGeneric("estimateSE", function(cat, theta.hat, D=1, priorName=NULL, priorParams=NULL, lowerBound=-4, upperBound=4, quadPoints=33, ...){standardGeneric("estimateSE")})
+setGeneric("estimateSE", function(cat, theta.hat,...){standardGeneric("estimateSE")})
 
 #' @export
-setMethod(f="estimateSE", signature="CATsurv", definition=function(cat, theta.hat, D=1, priorName=NULL, priorParams=NULL, lowerBound=-4, upperBound=4, quadPoints=33, ...) {
-  X = seq(from=lowerBound, to=upperBound, length=quadPoints)
-  applicable_rows = cat@questions[!is.na(cat@questions$answers), ]
+setMethod(f="estimateSE", signature=class.name, definition=function(cat, theta.hat,...) {
+  applicable_rows =   applicable_rows = which(!is.na(cat@answers))
   
-  priorName = if (!is.null(priorName)) priorName else cat@priorName
-  priorParams = if (!is.null(priorParams)) priorParams else cat@priorParams
-  prior.values = prior(cat, X, priorName, priorParams)
-  likelihood.values = rep(NA, times=length(X))
+  prior.values = prior(cat, cat@X, cat@priorName, cat@priorParams)
+  likelihood.values = rep(NA, times=length(cat@X))
   for (i in 1:length(likelihood.values)) {
-    likelihood.values[i] = likelihood(cat, X[i], applicable_rows, D)
+    likelihood.values[i] = likelihood(cat, cat@X[i], applicable_rows)
   }
   
-  results = sqrt(integrate.xy(X, (X - theta.hat)^2*likelihood.values*prior.values) / integrate.xy(X, likelihood.values*prior.values))
+  results = sqrt(integrate.xy(cat@X, (cat@X - theta.hat)^2*likelihood.values*prior.values) / integrate.xy(cat@X, likelihood.values*prior.values))
   return(results)
 })
