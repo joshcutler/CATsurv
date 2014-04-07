@@ -29,8 +29,8 @@ setMethod(f="nextItem", signature=class.name, definition=function(cat) {
     available_questions[i,]$epv = expectedPV(cat, available_questions[i,]$questions)
   }
   
-  next.item = available_questions[available_questions$epv == min(available_questions$epv, na.rm=TRUE), ]
-  to.return = list(all.estimates=available_questions, next.item=row.names(next.item)[1])
+  next.item = available_questions[available_questions$epv == min(available_questions$epv, na.rm=TRUE),1]
+  to.return = list(all.estimates=available_questions, next.item=next.item)
   
   return(to.return)
 })
