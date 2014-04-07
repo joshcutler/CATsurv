@@ -28,8 +28,8 @@ setValidity(class.name, function(object) {
   if (!("answers" %in% cols))
     return("No answers column detected in @questions")
   if (object@poly) 
-    if (!("response_count" %in% cols))
-      return("No response_count column detected in @questions for polytmous model")
+#    if (!("response_count" %in% cols))
+ #     return("No response_count column detected in @questions for polytmous model")
     if (is.null(object@difficulties))
       return("No difficulties present for polytmous model")
 
@@ -44,6 +44,7 @@ setMethod("initialize", class.name, function(.Object, ...) {
 
 setGeneric("three.pl", function(cat, theta, difficulty, discrimination, guessing, D=1){standardGeneric("three.pl")})
 setMethod(f="three.pl", signature=class.name, definition=function(cat, theta, difficulty, discrimination, guessing, D=1) {
+#browser()
   exp.portion = exp(D*discrimination*(theta - difficulty))
   prob = guessing + (1 - guessing)*(exp.portion / (1 + exp.portion))
 })
@@ -54,6 +55,7 @@ setMethod(f="likelihood", signature=class.name, definition=function(cat, theta, 
     probabilities = c()
     L = 1
     for (question in rownames(items)) {
+     # browser()
       this.question.cdf = three.pl(cat, theta, cat@difficulties[[question]], items[question, 'discrimination'], items[question, 'guessing'], D)
       this.question.cdf = c(1, this.question.cdf, 0)
       this.question.pdf = c()
@@ -80,8 +82,8 @@ setMethod(f="prior", signature=class.name, definition=function(cat, values, name
   return(prior.value)
 })
 
-setGeneric("estimateTheta", function(cat, D=1, priorName=NULL, priorParams=NULL, lowerBound=-4, upperBound=4, quadPoints=33, ...){standardGeneric("estimateTheta")})
-setMethod(f="estimateTheta", signature=class.name, definition=function(cat, D=1, priorName=NULL, priorParams=NULL, lowerBound=-4, upperBound=4, quadPoints=33, ...) {
+setGeneric("estimateTheta", function(cat, D=1, priorName=NULL, priorParams=NULL, lowerBound=-4.5, upperBound=4.5, quadPoints=43, ...){standardGeneric("estimateTheta")})
+setMethod(f="estimateTheta", signature=class.name, definition=function(cat, D=1, priorName=NULL, priorParams=NULL, lowerBound=-4.5, upperBound=4.5, quadPoints=43, ...) {
   X = seq(from=lowerBound, to=upperBound, length=quadPoints)
   applicable_rows = cat@questions[!is.na(cat@questions$answers), ]
 
@@ -93,13 +95,12 @@ setMethod(f="estimateTheta", signature=class.name, definition=function(cat, D=1,
   for (i in 1:length(likelihood.values)) {
     likelihood.values[i] = likelihood(cat, X[i], applicable_rows, D)
   }
-
   results = integrate.xy(X, X*likelihood.values*prior.values) / integrate.xy(X, likelihood.values*prior.values)
   return(results)
 })
 
-setGeneric("estimateSE", function(cat, theta.hat, D=1, priorName=NULL, priorParams=NULL, lowerBound=-4, upperBound=4, quadPoints=33, ...){standardGeneric("estimateSE")})
-setMethod(f="estimateSE", signature=class.name, definition=function(cat, theta.hat, D=1, priorName=NULL, priorParams=NULL, lowerBound=-4, upperBound=4, quadPoints=33, ...) {
+setGeneric("estimateSE", function(cat, theta.hat, D=1, priorName=NULL, priorParams=NULL, lowerBound=-4.5, upperBound=4.5, quadPoints=43, ...){standardGeneric("estimateSE")})
+setMethod(f="estimateSE", signature=class.name, definition=function(cat, theta.hat, D=1, priorName=NULL, priorParams=NULL, lowerBound=-4.5, upperBound=4.5, quadPoints=43, ...) {
   X = seq(from=lowerBound, to=upperBound, length=quadPoints)
   applicable_rows = cat@questions[!is.na(cat@questions$answers), ]
 
@@ -115,14 +116,14 @@ setMethod(f="estimateSE", signature=class.name, definition=function(cat, theta.h
   return(results)
 })
 
-setGeneric("expectedPV", function(cat, item, theta.est, D=1, lowerBound=-4, upperBound=4, quadPoints=33){standardGeneric("expectedPV")})
-setMethod(f="expectedPV", signature=class.name, definition=function(cat, item, theta.est, D=1, lowerBound=-4, upperBound=4, quadPoints=33) {
+setGeneric("expectedPV", function(cat, item, theta.est, D=1, lowerBound=-4.5, upperBound=4.5, quadPoints=43){standardGeneric("expectedPV")})
+setMethod(f="expectedPV", signature=class.name, definition=function(cat, item, theta.est, D=1, lowerBound=-4.5, upperBound=4.5, quadPoints=43) {
   if (cat@poly) {
     row.name = item
     thetas = rep(NA, length(cat@difficulties[row.name]) + 1)
     variances = rep(NA, length(cat@difficulties[row.name]) + 1)
     
-    for (i in 1:(length(difficulties[[row.name]]))) {
+    for (i in 1:(length(cat@difficulties[[row.name]])+1)) {
       cat@questions[row.name, 'answers'] = i
       thetas[i] = estimateTheta(cat, D=D, lowerBound=lowerBound, upperBound=upperBound, quadPoints=quadPoints)
       variances[i] = estimateSE(cat, thetas[i], D=D, lowerBound=lowerBound, upperBound=upperBound, quadPoints=quadPoints)^2
@@ -135,7 +136,7 @@ setMethod(f="expectedPV", signature=class.name, definition=function(cat, item, t
     for (i in 2:(length(this.question.cdf))) {
       this.question.pdf[i-1] = this.question.cdf[i-1] - this.question.cdf[i]
     }
-    
+   # browser()  ### HERE, maybe.
     return (sum(variances * this.question.pdf))
   } else {
     prob.correct = three.pl(cat, theta.est, cat@questions[item,]$difficulty, cat@questions[item,]$discrimination, cat@questions[item,]$guessing, D)
@@ -157,8 +158,8 @@ setMethod(f="expectedPV", signature=class.name, definition=function(cat, item, t
   }
 })
 
-setGeneric("nextItem", function(cat, theta.est=NA, D=1, lowerBound=-4, upperBound=4, quadPoints=33){standardGeneric("nextItem")})
-setMethod(f="nextItem", signature=class.name, definition=function(cat, theta.est=NA, D=1, lowerBound=-4, upperBound=4, quadPoints=33) {
+setGeneric("nextItem", function(cat, theta.est=NA, D=1, lowerBound=-4.5, upperBound=4.5, quadPoints=43){standardGeneric("nextItem")})
+setMethod(f="nextItem", signature=class.name, definition=function(cat, theta.est=NA, D=1, lowerBound=-4.5, upperBound=4.5, quadPoints=43) {
   available_questions = cat@questions[is.na(cat@questions$answers), ]
 
   if (is.na(theta.est)) {
@@ -182,8 +183,8 @@ setMethod(f="storeAnswer", signature=class.name, definition=function(cat, item, 
   return(cat)
 })
 
-setGeneric("debugNextItem", function(cat, theta.est=NA, D=1, lowerBound=-4, upperBound=4, quadPoints=33){standardGeneric("debugNextItem")})
-setMethod(f="debugNextItem", signature=class.name, definition=function(cat, theta.est=NA, D=1, lowerBound=-4, upperBound=4, quadPoints=33) {
+setGeneric("debugNextItem", function(cat, theta.est=NA, D=1, lowerBound=-4.5, upperBound=4.5, quadPoints=43){standardGeneric("debugNextItem")})
+setMethod(f="debugNextItem", signature=class.name, definition=function(cat, theta.est=NA, D=1, lowerBound=-4.5, upperBound=4.5, quadPoints=43) {
   if (is.na(theta.est)) {
     theta.est = estimateTheta(cat, D=D, lowerBound=lowerBound, upperBound=upperBound, quadPoints=quadPoints)
   }
