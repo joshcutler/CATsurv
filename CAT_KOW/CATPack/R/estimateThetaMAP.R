@@ -1,0 +1,24 @@
+#' Computerized Adaptive Testing Survey Maximum A Posteriori Function
+#'
+#' This function stimates the maximum value of the posterior density of theta.
+#'
+#' @param cat an object of \code{CATsurv} class.
+#' @param theta vector consisting of each respondent's position on the latent scale of interest.
+#' @param item-level parameters data frame containing discrimination parameter, guessing parameter, difficulty parameter, and answer for each item.
+#'
+#' @return A scalar valur representing the maximum value of the posterior density of theta.
+#'
+#' @author Josh W. Cutler and Jacob M. Montgomery
+#' @seealso \code{\link{likelihood}},\code{\link{prior}}, \code{\link{estimateTheta}}, \code{\link{estimateSE}}, \code{\link{expectedPV}}, \code{\link{nextItem}}, \code{\link{storeAnswer}}, \code{\link{debugNextItem}}
+#' @rdname estimateThetaMAP
+
+#' @export
+setGeneric("estimateThetaMAP", function(cat, items){standardGeneric("estimateThetaMAP")})
+
+#' @export
+setMethod(f="estimateThetaMAP", signature="CATsurv", definition=function(cat, items) {  
+  posterior<- function(theta, cat, items){
+    likelihood(cat, theta, items)*prior(cat, theta, cat@priorName, cat@priorParams)
+  }
+    optimize(f=posterior,interval=c(cat@lowerBound,cat@upperBound),cat,items,maximum=TRUE)$maximum
+})
