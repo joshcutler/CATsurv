@@ -1,3 +1,18 @@
+#' Computerized Adaptive Testing Survey Maximum Posterior Weighted Information Function
+#'
+#' This function determines the next item by comparing posterior weighted Fisher's information and choosing the largest and presents it to the respondent.
+#'
+#' @param cat an object of \code{CATsurv} class.
+#' @param theta vector consisting of each respondent's position on the latent scale of interest.
+#' @param item-level parameters data frame containing discrimination parameter, guessing parameter, difficulty parameter, and answer for each item.
+#'
+#' @return The next item to present to the respondent with the largest posterior weighted Fisher's information.
+#'
+#' @author Josh W. Cutler and Jacob M. Montgomery
+#' @seealso \code{\link{likelihood}},\code{\link{prior}}, \code{\link{estimateTheta}}, \code{\link{estimateSE}}, \code{\link{expectedPV}}, \code{\link{nextItem}}, \code{\link{storeAnswer}}, \code{\link{debugNextItem}}
+#' @rdname nextItemMPWI
+
+#' @export
 setGeneric("nextItemMPWI", function(cat){standardGeneric("nextItemMPWI")})
 
 #' @export
