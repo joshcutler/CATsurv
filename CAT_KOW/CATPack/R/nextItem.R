@@ -4,7 +4,7 @@
 #'
 #' @param cat An object of class \code{CATsurv}
 #' @param ability.estimator The estimation procedure used to estimate the respondent's position on the latent scale.  The three options are "EAP" for expected a posterior (the default),  "ML" for maximum likelihood, and "MAP" for maximum a posterior.
-#' @param item.selection The item selection procedure.  The five options are "EPV" for maximum expected a posterior value (the default),  "KL" for , "MFI" for maximum Fisher information, "MPWI" for, "MWFI" for maximum weighted Fisher information. 
+#' @param item.selection The item selection procedure.  The five options are "EPV" for maximum expected posterior value (the default),  "KL" for , "MFI" for maximum Fisher information, "MPWI" for, "MWFI" for maximum weighted Fisher information. 
 #' 
 #' @return A data frame of available questions based on the use selected item selection criterion for the respondent and a row name for the next item to be asked 
 #'  
