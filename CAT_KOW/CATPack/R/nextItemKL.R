@@ -12,10 +12,10 @@
 #' @seealso \code{\link{three.pl}},\code{\link{likelihood}}, \code{\link{prior.value}}, \code{\link{estimateTheta}}, \code{\link{estimateSE}}, \code{\link{expectedPV}},  \code{\link{storeAnswer}}, \code{\link{debugNextItem}}
 #' @rdname nextItemKL
 #' @export
-setGeneric("nextItemKL", function(cat){standardGeneric("nextItemKL")})
+setGeneric("nextItemKL", function(cat,...){standardGeneric("nextItemKL")})
 
 #' @export
-setMethod(f="nextItemKL", signature="CATsurv", definition=function(cat) {
+setMethod(f="nextItemKL", signature="CATsurv", definition=function(cat, available_questions) {
   colnames(available_questions) <- c("questions","KL")
   
   num.asked <- sum(!is.na(cat@answers))
