@@ -1,8 +1,8 @@
-setGeneric("nextItemMWFI", function(cat){standardGeneric("nextItemMWFI")})
+setGeneric("nextItemMWFI", function(cat,...){standardGeneric("nextItemMWFI")})
 
 #' @export
-setMethod(f="nextItemMWFI", signature=class.name, definition=function(cat) {
-  available_questions = data.frame(questions=which(is.na(cat@answers)),MWFI=NA)
+setMethod(f="nextItemMWFI", signature=class.name, definition=function(cat, available_questions) {
+  colnames(available_questions) <- c("questions", "MWFI")
   applicable_rows = which(!is.na(cat@answers))
   
   prior.values = prior(cat, cat@X, cat@priorName, cat@priorParams)
