@@ -5,7 +5,6 @@
 #' @param cat an object of class \code{CATsurv}.
 #' @param theta vector consisting of each respondent's position on the latent scale of interest
 #' @param item-level parameters data frame containing discrimination parameter, guessing parameter, difficulty parameter, and answer for each item, 
-#' @param D model parameter. 1 is for a logistic model and 1.702 for an approximation of the probit model. The default value is 1.
 #'
 #' @return A vector of the value of the likelihood function associated with the responses to the first \eqn{k-1} items for each respondent.
 #'  

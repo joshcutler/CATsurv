@@ -4,6 +4,7 @@
 #'
 #' @param cat An object of class \code{CATsurv}
 #' @param theta.est A scalar value to contain an estimate of a respondent's position on the latent trait, using the \code{\link{estimateTheta}} funciton. Defaults to NA.
+#' @param ... argument passed to other functions
 #'
 #' @return A list of available items, thier KL information, and the next item to ask the respondent.
 #'  
