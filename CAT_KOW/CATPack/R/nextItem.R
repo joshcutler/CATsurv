@@ -3,14 +3,9 @@
 #' This function takes a respondent's previous answers to determine the next item from the list of available questions determined according to a user specified methods for latent trait estimation and item selection. 
 #'
 #' @param cat An object of class \code{CATsurv}
-<<<<<<< HEAD
 #' @param ability.estimator The estimation procedure used to estimate the respondent's position on the latent scale.  The three options are "EAP" for expected a posterior (the default),  "ML" for maximum likelihood, and "MAP" for maximum a posterior.
 #' 
 #' @return A data frame of available questions based on the use selected item selection criterion for the respondent and a row name for the next item to be asked 
-=======
-#'
-#' @return A data frame of available questions based on the min expected posterior variance for respondent and a row name for the next item to be asked 
->>>>>>> FETCH_HEAD
 #'  
 #' @author Josh W. Cutler: \email{josh@@zistle.com} and Jacob M. Montgomery: \email{jacob.montgomery@@wustl.edu}
 #' @seealso \code{\link{three.pl}},\code{\link{likelihood}}, \code{\link{prior.value}}, \code{\link{estimateTheta}}, \code{\link{estimateSE}}, \code{\link{expectedPV}},  \code{\link{storeAnswer}}, \code{\link{debugNextItem}}

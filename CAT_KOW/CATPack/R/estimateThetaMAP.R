@@ -14,19 +14,11 @@
 setGeneric("estimateThetaMAP", function(cat){standardGeneric("estimateThetaMAP")})
 
 #' @export
-<<<<<<< HEAD
 setMethod(f="estimateThetaMAP", signature="CATsurv", definition=function(cat) {  
-=======
-setMethod(f="estimateThetaMAP", signature="CATsurv", definition=function(cat, items) {  
->>>>>>> FETCH_HEAD
   applicable_rows = which(!is.na(cat@answers))
   
   posterior<- function(theta, cat, items){
     likelihood(cat, theta, items)*prior(cat, theta, cat@priorName, cat@priorParams)
   }
-<<<<<<< HEAD
-    optimize(f=posterior,interval=c(cat@lowerBound,cat@upperBound),cat,applicable_rows,maximum=TRUE)$maximum
-=======
     optimize(f=posterior,interval=c(cat@lowerBound,cat@upperBound),cat=cat,items=applicable_rows,maximum=TRUE)$maximum
->>>>>>> FETCH_HEAD
 })
