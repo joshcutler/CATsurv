@@ -13,11 +13,11 @@
 #' @rdname nextItemMPWI
 
 #' @export
-setGeneric("nextItemMPWI", function(cat){standardGeneric("nextItemMPWI")})
+setGeneric("nextItemMPWI", function(cat,...){standardGeneric("nextItemMPWI")})
 
 #' @export
-setMethod(f="nextItemMPWI", signature=class.name, definition=function(cat) {
-  available_questions = data.frame(questions=which(is.na(cat@answers)),MPWI=NA)
+setMethod(f="nextItemMPWI", signature=class.name, definition=function(cat,...) {
+  colnames(available_questions) <- c("questions","MPWI")
   
   posterior<- function(theta, cat, items){
     likelihood(cat, theta, items)*prior(cat, theta, cat@priorName, cat@priorParams)
