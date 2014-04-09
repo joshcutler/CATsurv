@@ -4,6 +4,7 @@
 #'
 #' @param cat An object of class \code{CATsurv}
 #' @param ability.estimator The estimation procedure used to estimate the respondent's position on the latent scale.  The three options are "EAP" for expected a posterior (the default),  "ML" for maximum likelihood, and "MAP" for maximum a posterior.
+#' @param item.selection The item selection procedure.  The five options are "EPV" for maximum expected a posterior value (the default),  "KL" for , "MFI" for maximum Fisher information, "MPWI" for, "MWFI" for maximum weighted Fisher information. 
 #' 
 #' @return A data frame of available questions based on the use selected item selection criterion for the respondent and a row name for the next item to be asked 
 #'  
@@ -11,21 +12,16 @@
 #' @seealso \code{\link{three.pl}},\code{\link{likelihood}}, \code{\link{prior.value}}, \code{\link{estimateTheta}}, \code{\link{estimateSE}}, \code{\link{expectedPV}},  \code{\link{storeAnswer}}, \code{\link{debugNextItem}}
 #' @rdname nextItem
 #' @export
-setGeneric("nextItem", function(cat,ability.estimator="EAP"){standardGeneric("nextItem")})
+setGeneric("nextItem", function(cat,ability.estimator="EAP", item.selection="EPV"){standardGeneric("nextItem")})
 
 #' @export
-setMethod(f="nextItem", signature=class.name, definition=function(cat,ability.estimator="EAP") {
+setMethod(f="nextItem", signature=class.name, definition=function(cat,ability.estimator="EAP", item.selection="EPV") {
   available_questions = data.frame(questions=which(is.na(cat@answers)),epv=NA)
   
   cat@Theta.est <- switch(ability.estimator,EAP=estimateTheta(cat),ML=estimateThetaML(cat),MAP=estimateThetaMAP(cat))
   
-  for (i in 1:nrow(available_questions)) {
-    available_questions[i,]$epv = expectedPV(cat, available_questions[i,]$questions)
-  }
-  
-  next.item = available_questions[available_questions$epv == min(available_questions$epv, na.rm=TRUE),1]
-  to.return = list(all.estimates=available_questions, next.item=next.item)
-  
+  to.return <- switch(item.selection, EPV=nextItemEPV(cat, available_questions), KL=nextItemKL(cat, available_questions), 
+                      MFI=nextItemMFI(cat, available_questions),MPWI=nextItemMPWI(cat, available_questions), MWFI=nextItemMWFI(cat, available_questions)) 
   return(to.return)
 })
 
