@@ -16,7 +16,7 @@
 setGeneric("nextItemMPWI", function(cat,...){standardGeneric("nextItemMPWI")})
 
 #' @export
-setMethod(f="nextItemMPWI", signature=class.name, definition=function(cat,...) {
+setMethod(f="nextItemMPWI", signature=class.name, definition=function(cat,available_questions) {
   colnames(available_questions) <- c("questions","MPWI")
   
   posterior<- function(theta, cat, items){

@@ -4,11 +4,11 @@
 #'
 #' @param cat An object of class \code{CATsurv}
 #' @param ability.estimator The estimation procedure used to estimate the respondent's position on the latent scale.  The three options are "EAP" for expected a posterior (the default),  "ML" for maximum likelihood, and "MAP" for maximum a posterior.
-#' @param item.selection The item selection procedure.  The five options are "EPV" for maximum expected posterior value (the default),  "KL" for , "MFI" for maximum Fisher information, "MPWI" for, "MWFI" for maximum weighted Fisher information. 
+#' @param item.selection The item selection procedure.  The five options are "EPV" for maximum expected Information Criterion (the default),  "KL" for Kullback-Leibler, "MFI" for maximum Fisher's information, "MPWI" for maximum posterior wieghted information, "MWFI" for maximum weighted Fisher's information. 
 #' 
 #' @return A data frame of available questions based on the use selected item selection criterion for the respondent and a row name for the next item to be asked 
 #'  
-#' @author Josh W. Cutler: \email{josh@@zistle.com} and Jacob M. Montgomery: \email{jacob.montgomery@@wustl.edu}
+#' @author Josh W. Cutler: \email{josh@zistle.com} and Jacob M. Montgomery: \email{jacob.montgomery@wustl.edu}
 #' @seealso \code{\link{three.pl}},\code{\link{likelihood}}, \code{\link{prior.value}}, \code{\link{estimateTheta}}, \code{\link{estimateSE}}, \code{\link{expectedPV}},  \code{\link{storeAnswer}}, \code{\link{debugNextItem}}
 #' @rdname nextItem
 #' @export
