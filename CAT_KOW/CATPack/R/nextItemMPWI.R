@@ -3,8 +3,6 @@
 #' This function determines the next item by comparing posterior weighted Fisher's information and choosing the largest and presents it to the respondent.
 #'
 #' @param cat an object of \code{CATsurv} class.
-#' @param theta vector consisting of each respondent's position on the latent scale of interest.
-#' @param item-level parameters data frame containing discrimination parameter, guessing parameter, difficulty parameter, and answer for each item.
 #'
 #' @return The next item to present to the respondent with the largest posterior weighted Fisher's information.
 #'
@@ -13,11 +11,11 @@
 #' @rdname nextItemMPWI
 
 #' @export
-setGeneric("nextItemMPWI", function(cat,...){standardGeneric("nextItemMPWI")})
+setGeneric("nextItemMPWI", function(cat){standardGeneric("nextItemMPWI")})
 
 #' @export
-setMethod(f="nextItemMPWI", signature=class.name, definition=function(cat,available_questions) {
-  colnames(available_questions) <- c("questions","MPWI")
+setMethod(f="nextItemMPWI", signature=class.name, definition=function(cat) {
+  available_questions = data.frame(questions=which(is.na(cat@answers)),MPWI=NA)
   
   posterior<- function(theta, cat, items){
     likelihood(cat, theta, items)*prior(cat, theta, cat@priorName, cat@priorParams)

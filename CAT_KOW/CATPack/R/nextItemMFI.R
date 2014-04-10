@@ -1,8 +1,23 @@
-setGeneric("nextItemMFI", function(cat,...){standardGeneric("nextItemMFI")})
-          
-setMethod(f="nextItemMFI", signature=class.name, definition=function(cat, available_questions) {
-     colnames(available_questions) <- c("questions","MFI")
-     for (i in 1:nrow(available_questions)) {
+#' Computerized Adaptive Testing Survey Maximum Fisher's Information Function
+#'
+#' This function determines the next item by comparing Fisher's information and choosing the largest and presents it to the respondent.
+#'
+#' @param cat an object of \code{CATsurv} class.
+#'
+#' @return The next item to present to the respondent with the largest Fisher's information.
+#'
+#' @author Josh W. Cutler and Jacob M. Montgomery
+#' @seealso \code{\link{likelihood}},\code{\link{prior}}, \code{\link{estimateTheta}}, \code{\link{estimateSE}}, \code{\link{expectedPV}}, \code{\link{nextItem}}, \code{\link{storeAnswer}}, \code{\link{debugNextItem}}
+#' @rdname nextItemMFI
+
+#' @export
+
+setGeneric("nextItemMFI", function(cat){standardGeneric("nextItemMFI")})
+
+#' @export
+setMethod(f="nextItemMFI", signature=class.name, definition=function(cat) {
+  available_questions = data.frame(questions=which(is.na(cat@answers)),MFI=NA)   
+  for (i in 1:nrow(available_questions)) {
           items <- available_questions[i,]$questions
           theta.hat <- cat@Theta.est
           exp.portion <- exp(cat@D*cat@difficulty[items]*(theta.hat-cat@discrimination[items]))

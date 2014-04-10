@@ -1,8 +1,21 @@
+#' Computerized Adaptive Testing Survey Maximum Weighted Fisher's Information Function
+#'
+#' This function determines the next item by comparing weighted Fisher's information and choosing the largest and presents it to the respondent.
+#'
+#' @param cat an object of \code{CATsurv} class.
+#'
+#' @return The next item to present to the respondent with the largest weighted Fisher's information.
+#'
+#' @author Josh W. Cutler and Jacob M. Montgomery
+#' @seealso \code{\link{likelihood}},\code{\link{prior}}, \code{\link{estimateTheta}}, \code{\link{estimateSE}}, \code{\link{expectedPV}}, \code{\link{nextItem}}, \code{\link{storeAnswer}}, \code{\link{debugNextItem}}
+#' @rdname nextItemMWFI
+
+#' @export
 setGeneric("nextItemMWFI", function(cat,...){standardGeneric("nextItemMWFI")})
 
 #' @export
 setMethod(f="nextItemMWFI", signature=class.name, definition=function(cat, available_questions) {
-  colnames(available_questions) <- c("questions", "MWFI")
+  available_questions = data.frame(questions=which(is.na(cat@answers)),MWFI=NA)
   applicable_rows = which(!is.na(cat@answers))
   
   prior.values = prior(cat, cat@X, cat@priorName, cat@priorParams)

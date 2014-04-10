@@ -3,8 +3,6 @@
 #' This function takes a respondent's previous answers to determine the next item from the list of available questions, determined according to each remaining item's Kullback Leibler information. 
 #'
 #' @param cat An object of class \code{CATsurv}
-#' @param theta.est A scalar value to contain an estimate of a respondent's position on the latent trait, using the \code{\link{estimateTheta}} funciton. Defaults to NA.
-#' @param ... argument passed to other functions
 #'
 #' @return A list of available items, thier KL information, and the next item to ask the respondent.
 #'  
@@ -16,7 +14,7 @@ setGeneric("nextItemKL", function(cat,...){standardGeneric("nextItemKL")})
 
 #' @export
 setMethod(f="nextItemKL", signature="CATsurv", definition=function(cat, available_questions) {
-  colnames(available_questions) <- c("questions","KL")
+  available_questions = data.frame(questions=which(is.na(cat@answers)),KL=NA)
   
   num.asked <- sum(!is.na(cat@answers))
   

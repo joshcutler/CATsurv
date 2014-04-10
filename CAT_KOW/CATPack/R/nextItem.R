@@ -4,7 +4,7 @@
 #'
 #' @param cat An object of class \code{CATsurv}
 #' @param ability.estimator The estimation procedure used to estimate the respondent's position on the latent scale.  The three options are "EAP" for expected a posterior (the default),  "ML" for maximum likelihood, and "MAP" for maximum a posterior.
-#' @param item.selection The item selection procedure.  The five options are "EPV" for maximum expected Information Criterion (the default),  "KL" for Kullback-Leibler, "MFI" for maximum Fisher's information, "MPWI" for maximum posterior wieghted information, "MWFI" for maximum weighted Fisher's information. 
+#' @param item.selection The item selection procedure.  The five options are "EPV" for minimum expected posterior variance (the default),  "KL" for Kullback-Leibler, "MFI" for maximum Fisher's information, "MPWI" for maximum posterior wieghted information, "MWFI" for maximum weighted Fisher's information. 
 #' 
 #' @return A data frame of available questions based on the use selected item selection criterion for the respondent and a row name for the next item to be asked 
 #'  
@@ -20,8 +20,7 @@ setMethod(f="nextItem", signature=class.name, definition=function(cat,ability.es
   
   cat@Theta.est <- switch(ability.estimator,EAP=estimateTheta(cat),ML=estimateThetaML(cat),MAP=estimateThetaMAP(cat))
   
-  to.return <- switch(item.selection, EPV=nextItemEPV(cat, available_questions), KL=nextItemKL(cat, available_questions), 
-                      MFI=nextItemMFI(cat, available_questions),MPWI=nextItemMPWI(cat, available_questions), MWFI=nextItemMWFI(cat, available_questions)) 
+  to.return <- switch(item.selection, EPV=nextItemEPV(cat), KL=nextItemKL(cat), MFI=nextItemMFI(cat),MPWI=nextItemMPWI(cat), MWFI=nextItemMWFI(cat)) 
   return(to.return)
 })
 
