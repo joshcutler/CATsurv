@@ -4,6 +4,7 @@
 #'
 #' @param cat An object of class \code{CATsurv}
 #' @param theta.est A scalar value to contain an estimate of a respondent's position on the latent trait, using the \code{\link{estimateTheta}} funciton. Defaults to NA.
+#' @param ... argument passed to other functions
 #'
 #' @return A list of available items, thier KL information, and the next item to ask the respondent.
 #'  
@@ -11,17 +12,18 @@
 #' @seealso \code{\link{three.pl}},\code{\link{likelihood}}, \code{\link{prior.value}}, \code{\link{estimateTheta}}, \code{\link{estimateSE}}, \code{\link{expectedPV}},  \code{\link{storeAnswer}}, \code{\link{debugNextItem}}
 #' @rdname nextItemKL
 #' @export
-setGeneric("nextItemKL", function(cat, theta.est,...){standardGeneric("nextItemKL")})
+setGeneric("nextItemKL", function(cat,...){standardGeneric("nextItemKL")})
 
 #' @export
-setMethod(f="nextItemKL", signature="CATsurv", definition=function(cat, theta.est...) {
-  available_questions = data.frame(questions=which(is.na(cat@answers)),KL=NA)
+setMethod(f="nextItemKL", signature="CATsurv", definition=function(cat, available_questions) {
+  colnames(available_questions) <- c("questions","KL")
+  
   num.asked <- sum(!is.na(cat@answers))
   
   delta.int <- seq(from=cat@lowerBound*(1-num.asked/length(cat@answers)), to=cat@upperBound*(1-num.asked/length(cat@answers)), length=cat@quadPoints)
   i=2
   for (i in 1:nrow(available_questions)) {
-    p.theta.hat <- three.pl(cat,theta.est,cat@difficulty[available_questions[i,1]], cat@discrimination[available_questions[i,1]], cat@guessing[available_questions[i,1]])
+    p.theta.hat <- three.pl(cat,cat@Theta.est,cat@difficulty[available_questions[i,1]], cat@discrimination[available_questions[i,1]], cat@guessing[available_questions[i,1]])
     
     p.theta.null <- three.pl(cat,delta.int,cat@difficulty[available_questions[i,1]], cat@discrimination[available_questions[i,1]], cat@guessing[available_questions[i,1]])
     

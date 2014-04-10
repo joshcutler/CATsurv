@@ -1,36 +1,27 @@
 #' Computerized Adaptive Testing Survey Next Item Function
 #'
-#' This function takes a respondent's previous answers to determine the next item from the list of available questions, by using the expected \emph{a posteriori} (EAP) position on the latent scale. 
+#' This function takes a respondent's previous answers to determine the next item from the list of available questions determined according to a user specified methods for latent trait estimation and item selection. 
 #'
 #' @param cat An object of class \code{CATsurv}
-#' @param theta.est A scalar value to contain an estimate of a respondent's position on the latent trait, using the \code{\link{estimateTheta}} funciton. Defaults to NA.
-#' @param D A numeric value used as model parameter.  For logit models, set D=1.  For an approximation of the probit model, set D=1.702.  Defaults to D=1.   
-#' @param lowerBound The lower bound of the interval of the latent trait used in estimation.  Defaults to -4.
-#' @param upperBound The upper bound of the interval of the latent trait used in estimation.  Defaults to 4.
-#' @param quadPoints The number of points used in approximating the integral.  Defaults to 33.
-#'
-#' @return A data frame of available questions based on the min expected posterior variance for respondent and a row name for the next item to be asked 
+#' @param ability.estimator The estimation procedure used to estimate the respondent's position on the latent scale.  The three options are "EAP" for expected a posterior (the default),  "ML" for maximum likelihood, and "MAP" for maximum a posterior.
+#' @param item.selection The item selection procedure.  The five options are "EPV" for maximum expected posterior value (the default),  "KL" for , "MFI" for maximum Fisher information, "MPWI" for, "MWFI" for maximum weighted Fisher information. 
+#' 
+#' @return A data frame of available questions based on the use selected item selection criterion for the respondent and a row name for the next item to be asked 
 #'  
 #' @author Josh W. Cutler: \email{josh@@zistle.com} and Jacob M. Montgomery: \email{jacob.montgomery@@wustl.edu}
 #' @seealso \code{\link{three.pl}},\code{\link{likelihood}}, \code{\link{prior.value}}, \code{\link{estimateTheta}}, \code{\link{estimateSE}}, \code{\link{expectedPV}},  \code{\link{storeAnswer}}, \code{\link{debugNextItem}}
 #' @rdname nextItem
 #' @export
-setGeneric("nextItem", function(cat){standardGeneric("nextItem")})
+setGeneric("nextItem", function(cat,ability.estimator="EAP", item.selection="EPV"){standardGeneric("nextItem")})
 
 #' @export
-setMethod(f="nextItem", signature=class.name, definition=function(cat) {
-  available_questions = data.frame(questions=which(is.na(cat@answers)),epv=NA)
-                                     
-    cat@Theta.est = estimateTheta(cat)
-
+setMethod(f="nextItem", signature=class.name, definition=function(cat,ability.estimator="EAP", item.selection="EPV") {
+  available_questions = data.frame(questions=which(is.na(cat@answers)),a=NA)
   
-  #available_questions$epv = NA
-  for (i in 1:nrow(available_questions)) {
-    available_questions[i,]$epv = expectedPV(cat, available_questions[i,]$questions)
-  }
+  cat@Theta.est <- switch(ability.estimator,EAP=estimateTheta(cat),ML=estimateThetaML(cat),MAP=estimateThetaMAP(cat))
   
-  next.item = available_questions[available_questions$epv == min(available_questions$epv, na.rm=TRUE),1]
-  to.return = list(all.estimates=available_questions, next.item=next.item)
-  
+  to.return <- switch(item.selection, EPV=nextItemEPV(cat, available_questions), KL=nextItemKL(cat, available_questions), 
+                      MFI=nextItemMFI(cat, available_questions),MPWI=nextItemMPWI(cat, available_questions), MWFI=nextItemMWFI(cat, available_questions)) 
   return(to.return)
 })
+
