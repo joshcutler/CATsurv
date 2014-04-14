@@ -25,5 +25,5 @@ setMethod(f="observedInfo", signature="CATsurv", definition=function(cat, theta,
   p.2prime.theta<- (cat@D^2*(cat@difficulty)^2*e.value*(1-e.value)*(1-cat@guessing))/(1+e.value)^3                        
   q.theta<- 1-p.theta
   observedInfo<- (p.theta*q.theta*p.prime.theta^2-(cat@answers-p.theta))*((p.theta*q.theta*p.2prime.theta)+(p.prime.theta^2*(p.theta-q.theta)))/(p.theta^2*q.theta^2)
-  return(observedInfo)
+  return(observedInfo[items])
 })
