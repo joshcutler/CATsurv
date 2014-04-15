@@ -18,7 +18,7 @@ setMethod(f="nextItemKL", signature="CATsurv", definition=function(cat, availabl
   
   num.asked <- sum(!is.na(cat@answers))
   
-  delta.int <- seq(from=cat@lowerBound*(1-num.asked/length(cat@answers)), to=cat@upperBound*(1-num.asked/length(cat@answers)), length=cat@quadPoints)
+  delta.int <- seq(from=cat@Theta.est+cat@lowerBound*(1-num.asked/length(cat@answers)), to=cat@Theta.est+cat@upperBound*(1-num.asked/length(cat@answers)), length=cat@quadPoints)
   i=2
   for (i in 1:nrow(available_questions)) {
     p.theta.hat <- three.pl(cat,cat@Theta.est,cat@difficulty[available_questions[i,1]], cat@discrimination[available_questions[i,1]], cat@guessing[available_questions[i,1]])
