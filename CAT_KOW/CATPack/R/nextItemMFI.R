@@ -27,8 +27,8 @@ setMethod(f="nextItemMFI", signature=class.name, definition=function(cat) {
           available_questions[i,]$MFI = I
           }
             
-  next.item = available_questions[available_questions$MFI == max(available_questions$MFI, na.rm=TRUE), ]
-  to.return = list(all.estimates=available_questions, next.item=row.names(next.item)[1])
+  next.item = available_questions[available_questions$MFI == max(available_questions$MFI, na.rm=TRUE), 1]
+  to.return = list(all.estimates=available_questions, next.item=next.item)
             
 return(to.return)
 })          
