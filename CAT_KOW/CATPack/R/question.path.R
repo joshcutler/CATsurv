@@ -1,0 +1,53 @@
+#' Computerized Adaptive Testing Survey Possible Combination of Question Paths
+#'
+#' This function returns the all possible combinations of question paths up to 5th stage or \code{n-1}th stage when the length of questions is less than or equal to 5.
+#'
+#' @param cat an object of \code{CATsurv} class.
+#' @param ability.estimator The estimation procedure used to estimate the respondent's position on the latent scale.  The three options are "EAP" for expected a posterior (the default),  "ML" for maximum likelihood, and "MAP" for maximum a posterior.
+#' @param item.selection The item selection procedure.  The five options are "EPV" for minimum expected posterior variance (the default),  "KL" for Kullback-Leibler, "MFI" for maximum Fisher's information, "MPWI" for maximum posterior wieghted information, "MWFI" for maximum weighted Fisher's information, "MEI" for maximum expected information. 
+#'
+#' @return A list consisting of the all possible question paths according to the answers at each stage.
+#'
+#' @details 
+#'
+#' @author Josh W. Cutler and Jacob M. Montgomery
+#' @seealso \code{\link{likelihood}},\code{\link{prior.value}}, \code{\link{estimateTheta}}, \code{\link{estimateSE}}, \code{\link{expectedPV}}, \code{\link{nextItem}}, \code{\link{storeAnswer}}, \code{\link{debugNextItem}}
+#' @rdname question.path
+#' @export
+setGeneric("question.path", function(cat,ability.estimator="EAP",item.selection="EPV"){standardGeneric("question.path")})
+
+#' @export 
+setMethod(f="question.path", signature=class.name, definition=function(cat,ability.estimator="EAP",item.selection="EPV"){
+  q <- nextItem(cat, ability.estimator, item.selection)$next.item
+  x <- c(0,1)
+  if(length(cat@answers)<=5){
+    cat("the length of questions is less than 5.\ncalculate all possible question paths up to",length(cat@answers)-1,"stage.")
+    arg <- list(NULL)
+     for(i in 1:(length(cat@answers)-1)){
+      arg[[i]] <- x
+     }
+    possible.paths <- expand.grid(arg)
+  } else {possible.paths <- expand.grid(x,x,x,x,x)}
+  
+  answer <- NA
+  names(answer) <- "NA"
+  outcome <- list(NULL)
+  outcome[[1]] <- list(answer.history=answer, next.item=q)
+  for(i in 1:nrow(possible.paths)){
+    for(j in 1:ncol(possible.paths)){
+      answer.new <- possible.paths[i,j]
+      vectorname <- names(answer)
+      vectorname <- c(vectorname, paste("Q",q,sep=""))
+      cat@answers[q] <- answer.new
+      q <- nextItem(cat, ability.estimator, item.selection)$next.item
+      answer <- c(answer, answer.new)
+      names(answer) <- vectorname
+      outcome[[(i-1)*ncol(possible.paths)+j+1]] <- list(answer.history=answer, next.item=q)
+    }
+    cat@answers[1:length(cat@answers)] <- NA
+    answer <- NA
+    names(answer) <- "NA"
+    q <- nextItem(cat, ability.estimator, item.selection)$next.item
+  }
+  return(outcome)
+})

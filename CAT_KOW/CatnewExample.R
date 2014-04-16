@@ -270,6 +270,7 @@ library(ltm)
 # dichotomous 
 data(Abortion)
 cat <- ltmCAT(Abortion)
+question.path(cat)
 nextItem(cat)
 
 storeAnswer(cat,1,1)
