@@ -25,7 +25,7 @@ setGeneric("ltmCAT", function(data, object=NULL, ...){standardGeneric("ltmCAT")}
 setMethod(f="ltmCAT", signature="data.frame", 
           definition=function(data, object,...){
             if(!is.null(object)) if(class(object)!="CATsurv") stop("object is not class CATsurv")            
-            fit <- tpm(data)
+            fit <- tpm(data,...)
             coefficient <- coef(fit)
             answer <- rep(NA,nrow(coefficient))
             discrimination <- coefficient[,"Dscrmn"]

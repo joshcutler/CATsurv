@@ -25,7 +25,7 @@ setGeneric("grmCAT", function(data, object=NULL, ...){standardGeneric("grmCAT")}
 setMethod(f="grmCAT", signature="data.frame", 
           definition=function(data, object,...){
             if(!is.null(object)) if(class(object)!="CATsurv") stop("object is not class CATsurv")            
-            fit <- grm(data=data)
+            fit <- grm(data=data,...)
             coefficient <- coef(fit)
             answer <- rep(NA,nrow(coefficient))
             discrimination <- coefficient[,"Dscrmn"]
