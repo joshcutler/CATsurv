@@ -6,7 +6,7 @@
 #' @param ability.estimator The estimation procedure used to estimate the respondent's position on the latent scale.  The three options are "EAP" for expected a posterior (the default),  "ML" for maximum likelihood, and "MAP" for maximum a posterior.
 #' @param item.selection The item selection procedure.  The five options are "EPV" for minimum expected posterior variance (the default),  "KL" for Kullback-Leibler, "MFI" for maximum Fisher's information, "MPWI" for maximum posterior wieghted information, "MWFI" for maximum weighted Fisher's information, "MEI" for maximum expected information. 
 #'
-#' @return A list consisting of the all possible question paths according to the answers at each stage.
+#' @return A list consisting of the all possible question paths according to the answer at each stage.
 #'
 #' @details 
 #'
@@ -20,15 +20,21 @@ setGeneric("question.path", function(cat,ability.estimator="EAP",item.selection=
 setMethod(f="question.path", signature=class.name, definition=function(cat,ability.estimator="EAP",item.selection="EPV"){
   q <- nextItem(cat, ability.estimator, item.selection)$next.item
   x <- c(0,1)
-  if(length(cat@answers)<=5){
-    cat("the length of questions is less than 5.\ncalculate all possible question paths up to",length(cat@answers)-1,"stage.")
+  n <- length(cat@answers)
+  if(n<=5){
+    cat("the length of questions is less than 5.\ncalculate all possible question paths up to",length(cat@answers)-1,"stage.\n")
     arg <- list(NULL)
-     for(i in 1:(length(cat@answers)-1)){
+     for(i in 1:(n-1)){
       arg[[i]] <- x
-     }
+      }
     possible.paths <- expand.grid(arg)
-  } else {possible.paths <- expand.grid(x,x,x,x,x)}
-  
+    ord <- order(possible.paths[,1],possible.paths[,ifelse(n<3,1,2)],possible.paths[,ifelse(n<4,1,3)],possible.paths[,ifelse(n<5,1,4)])
+    possible.paths <- possible.paths[ord,]  
+  } else {possible.paths <- expand.grid(x,x,x,x,x)
+          ord <- order(possible.paths[,1],possible.paths[,2],possible.paths[,3],possible.paths[,4],possible.paths[,5])
+          possible.paths <- possible.paths[ord,]  
+  }
+    
   answer <- NA
   names(answer) <- "NA"
   outcome <- list(NULL)
@@ -49,5 +55,16 @@ setMethod(f="question.path", signature=class.name, definition=function(cat,abili
     names(answer) <- "NA"
     q <- nextItem(cat, ability.estimator, item.selection)$next.item
   }
-  return(outcome[!duplicated(outcome)])
+  outcome <- outcome[!duplicated(outcome)]
+  l <- NULL
+  for(i in 1:length(outcome)){
+    new <- 100*length(outcome[[i]][[1]])+i
+    l <- c(l, new)
+  }
+  l <- rank(l)
+  output <- list(NULL)
+  for(i in 1:length(outcome)){
+    output[[i]] <- outcome[[which(l==i)]]  
+  }
+  return(output)
 })
