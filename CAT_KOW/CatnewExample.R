@@ -268,8 +268,8 @@ setMethod(f="nextItem", signature=class.name, definition=function(cat) {
 library(sfsmisc)
 library(ltm)
 # dichotomous 
-data(Abortion)
-cat <- ltmCAT(Abortion)
+data(Mobility)
+cat <- ltmCAT(Mobility, start.val="random")
 question.path(cat)
 nextItem(cat)
 
