@@ -49,5 +49,5 @@ setMethod(f="question.path", signature=class.name, definition=function(cat,abili
     names(answer) <- "NA"
     q <- nextItem(cat, ability.estimator, item.selection)$next.item
   }
-  return(outcome)
+  return(outcome[!duplicated(outcome)])
 })
