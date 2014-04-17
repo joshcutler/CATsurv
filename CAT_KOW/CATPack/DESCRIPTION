@@ -8,7 +8,7 @@ Author: Josh Cutler and Jacob Montgomery
 Maintainer: Josh Cutler <josh@zistle.com>
 Depends:
     R (>= 3.0.0),
-    sfsmisc
+    sfsmisc,
     ltm
 License: GPL (>=2)
 LazyData: true
