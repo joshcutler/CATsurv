@@ -1,10 +1,10 @@
 #' Computerized Adaptive Testing Graded Response Model
 #'
-#' This function fits the Graded Response model for ordinal polytomous data and populates the fitted values for discimination and difficulty parameters to an object of class \code{PolyCATsurv}.  
+#' This function fits the Graded Response model for ordinal polytomous data and populates the fitted values for discimination and difficulty parameters to an object of class \code{CATsurv}.  
 #'
 #' @param data a \code{data.frame} or a numeric \code{matrix} of manifest variables. 
 #' @param object an object of class \code{CATsurv} to be populated. If omitted, a new object of class \code{CATsurv} is created.
-#' @param ... arguments to be passed to methods. For more details about the arguments, see \link{\code{grm}}.
+#' @param ... arguments to be passed to methods. For more details about the arguments, see \code{\link{grm}}.
 #'
 #'  @return An object of class \code{CATsurv} with components,
 #' \itemize{
@@ -17,7 +17,7 @@
 #' }
 #' @note In case the Hessian matrix at convergence is not positive definite try to use \code{start.val="random"}. 
 #' @author Josh W. Cutler: \email{josh@@zistle.com} and Jacob M. Montgomery: \email{jacob.montgomery@@wustl.edu}
-#' @seealso \code{\link{ltmCAT}}, \code{\link{nextItem}}
+#' @seealso \code{\link{ltmCAT}},\code{\link{nextItem}}, \code{\link{question.path}}
 #' @rdname grmCAT
 #' @export
 setGeneric("grmCAT", function(data, object=NULL, ...){standardGeneric("grmCAT")})
