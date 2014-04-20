@@ -8,8 +8,6 @@
 #'
 #' @return A list consisting of the all possible question paths according to the answer at each stage.
 #'
-#' @details 
-#'
 #' @author Josh W. Cutler and Jacob M. Montgomery
 #' @seealso \code{\link{likelihood}},\code{\link{prior.value}}, \code{\link{estimateTheta}}, \code{\link{estimateSE}}, \code{\link{expectedPV}}, \code{\link{nextItem}}, \code{\link{storeAnswer}}, \code{\link{debugNextItem}}
 #' @rdname question.path
