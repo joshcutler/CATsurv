@@ -16,11 +16,6 @@ setGeneric("storeAnswer", function(cat, item, answer){standardGeneric("storeAnsw
 
 #' @export
 setMethod(f="storeAnswer", signature=class.name, definition=function(cat, item, answer) {
-  eval( 
-    eval( 
-      substitute( 
-        expression(cat@answers[item] <<- answer) 
-        ,env=parent.frame(1) ) 
-    ) 
-  ) 
+  cat@answers[item] <- answer
+  return(cat)
 })
