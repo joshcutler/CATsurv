@@ -17,7 +17,7 @@
 #' }
 #' @note In case the Hessian matrix at convergence is not positive definite try to use \code{start.val="random"}. 
 #' @author Josh W. Cutler: \email{josh@@zistle.com} and Jacob M. Montgomery: \email{jacob.montgomery@@wustl.edu}
-#' @seealso \code{\link{grmCAT}}, \code{\link{three.pl}},\code{\link{likelihood}}, \code{\link{prior.value}}, \code{\link{estimateTheta}}, \code{\link{estimateSE}}, \code{\link{expectedPV}},  \code{\link{storeAnswer}}, \code{\link{debugNextItem}}
+#' @seealso \code{\link{grmCAT}}, \code{\link{nextItem}}
 #' @rdname ltmCAT
 #' @export
 setGeneric("ltmCAT", function(data, object=NULL, ...){standardGeneric("ltmCAT")})
