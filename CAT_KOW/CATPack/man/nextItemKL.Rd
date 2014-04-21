@@ -1,0 +1,30 @@
+\name{nextItemKL}
+\alias{nextItemKL}
+\title{Computerized Adaptive Testing Survey Next Item Function - Kullback Leibler Method}
+\usage{
+nextItemKL(cat, ...)
+}
+\arguments{
+  \item{cat}{An object of class \code{CATsurv}}
+}
+\value{
+A list of available items, thier KL information, and the
+next item to ask the respondent.
+}
+\description{
+This function takes a respondent's previous answers to
+determine the next item from the list of available
+questions, determined according to each remaining item's
+Kullback Leibler information.
+}
+\author{
+Josh W. Cutler: \email{josh@zistle.com} and Jacob M.
+Montgomery: \email{jacob.montgomery@wustl.edu}
+}
+\seealso{
+\code{\link{three.pl}},\code{\link{likelihood}},
+\code{\link{prior.value}}, \code{\link{estimateTheta}},
+\code{\link{estimateSE}}, \code{\link{expectedPV}},
+\code{\link{storeAnswer}}, \code{\link{debugNextItem}}
+}
+

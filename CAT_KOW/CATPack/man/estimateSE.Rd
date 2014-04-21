@@ -2,8 +2,7 @@
 \alias{estimateSE}
 \title{Computerized Adaptive Testing Survey Posterior Standard Error of Estimated Latent Trait Position Estimator}
 \usage{
-estimateSE(cat, theta.hat, D = 1, priorName = NULL, priorParams = NULL,
-  lowerBound = -4, upperBound = 4, quadPoints = 33, ...)
+estimateSE(cat, theta.hat, ...)
 }
 \arguments{
   \item{cat}{An object of class \code{CATsurv}}
@@ -13,28 +12,7 @@ estimateSE(cat, theta.hat, D = 1, priorName = NULL, priorParams = NULL,
   this is the output of the \code{\link{estimateTheta}}
   funciton.}
 
-  \item{D}{A numeric value used as model parameter.  For
-  logit models, set D=1.  For an approximation of the
-  probit model, set D=1.702.  Defaults to D=1.}
-
-  \item{priorName}{The type of prior distribution for
-  respondent's position on the latent scale of interest.}
-
-  \item{priorParams}{The parameters for the prior
-  distribution specified by \code{priorName}.  The first
-  parameter is the mean/location parameter, the second is
-  the standard deviation/scale parameter, and the third
-  (only used by the "t" distribution) is a degrees of
-  freedom parameter.}
-
-  \item{lowerBound}{The lower bound of the interval of the
-  latent trait used in estimation.  Defaults to -4.}
-
-  \item{upperBound}{The upper bound of the interval of the
-  latent trait used in estimation.  Defaults to 4.}
-
-  \item{quadPoints}{The number of points used in
-  approximating the integral.  Defaults to 33.}
+  \item{...}{argument passed to other functions.}
 }
 \value{
 The estimate of the standard error of the user supplied

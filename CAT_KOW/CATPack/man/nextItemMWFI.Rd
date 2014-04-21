@@ -1,0 +1,28 @@
+\name{nextItemMWFI}
+\alias{nextItemMWFI}
+\title{Computerized Adaptive Testing Survey Maximum Weighted Fisher's Information Function}
+\usage{
+nextItemMWFI(cat, ...)
+}
+\arguments{
+  \item{cat}{an object of \code{CATsurv} class.}
+}
+\value{
+The next item to present to the respondent with the largest
+weighted Fisher's information.
+}
+\description{
+This function determines the next item by comparing
+weighted Fisher's information and choosing the largest and
+presents it to the respondent.
+}
+\author{
+Josh W. Cutler and Jacob M. Montgomery
+}
+\seealso{
+\code{\link{likelihood}},\code{\link{prior}},
+\code{\link{estimateTheta}}, \code{\link{estimateSE}},
+\code{\link{expectedPV}}, \code{\link{nextItem}},
+\code{\link{storeAnswer}}, \code{\link{debugNextItem}}
+}
+

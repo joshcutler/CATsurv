@@ -2,33 +2,12 @@
 \alias{estimateTheta}
 \title{Computerized Adaptive Testing Survey Estimating Each Respondent's Position on the Latent Scale of Interest}
 \usage{
-estimateTheta(cat, D = 1, priorName = NULL, priorParams = NULL,
-  lowerBound = -4, upperBound = 4, quadPoints = 33, ...)
+estimateTheta(cat, ...)
 }
 \arguments{
   \item{cat}{an object of class \code{CATsurv}.}
 
-  \item{D}{model parameter. \code{1} is for a logistic
-  model and \code{1.702} for an approximation of the probit
-  model. The default value is 1.}
-
-  \item{priorName}{the type of prior distribution for
-  respondent's position on the latent scale of interest.}
-
-  \item{priorParams}{the parameters for prior distribution.
-  The first element for mean value, the second for standard
-  deviation, and the third for degree of freedom.}
-
-  \item{lowerBound}{the lower bound of the interval of the
-  latent scale used in estimation. The default value is
-  \code{-4}}
-
-  \item{upperBound}{the upper bound of the interval of the
-  latent scale used in estimation. The default value is
-  \code{4}}
-
-  \item{quadPoints}{desired number of points to be used in
-  approximating integral. The default value is \code{33}.}
+  \item{...}{argument passed to other functions.}
 }
 \value{
 A vector consisting of the expected \emph{a posteriori}

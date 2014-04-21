@@ -1,0 +1,28 @@
+\name{nextItemEPV}
+\alias{nextItemEPV}
+\title{Computerized Adaptive Testing Survey Minimum Expected Posterior Variance Function}
+\usage{
+nextItemEPV(cat, ...)
+}
+\arguments{
+  \item{cat}{an object of \code{CATsurv} class.}
+}
+\value{
+The next item to present to the respondent with the
+smallest expected posterior variance.
+}
+\description{
+This function determines the next item by comparing
+expected posterior variance and choosing the smallest and
+presents it to the respondent.
+}
+\author{
+Josh W. Cutler and Jacob M. Montgomery
+}
+\seealso{
+\code{\link{likelihood}},\code{\link{prior}},
+\code{\link{estimateTheta}}, \code{\link{estimateSE}},
+\code{\link{expectedPV}}, \code{\link{nextItem}},
+\code{\link{storeAnswer}}, \code{\link{debugNextItem}}
+}
+

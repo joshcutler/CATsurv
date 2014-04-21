@@ -1,0 +1,28 @@
+\name{nextItemMPWI}
+\alias{nextItemMPWI}
+\title{Computerized Adaptive Testing Survey Maximum Posterior Weighted Information Function}
+\usage{
+nextItemMPWI(cat)
+}
+\arguments{
+  \item{cat}{an object of \code{CATsurv} class.}
+}
+\value{
+The next item to present to the respondent with the largest
+posterior weighted Fisher's information.
+}
+\description{
+This function determines the next item by comparing
+posterior weighted Fisher's information and choosing the
+largest and presents it to the respondent.
+}
+\author{
+Josh W. Cutler and Jacob M. Montgomery
+}
+\seealso{
+\code{\link{likelihood}},\code{\link{prior}},
+\code{\link{estimateTheta}}, \code{\link{estimateSE}},
+\code{\link{expectedPV}}, \code{\link{nextItem}},
+\code{\link{storeAnswer}}, \code{\link{debugNextItem}}
+}
+

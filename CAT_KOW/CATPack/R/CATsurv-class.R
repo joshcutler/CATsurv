@@ -29,8 +29,8 @@
 #' @export
 
 class.name = "CATsurv"
-setClassUnion("numericORlist", c("numeric","list"))
 setClassUnion("logicalORnumeric", c("numeric","logical"))
+setClassUnion("numericORlist", c("numeric","list"))
 
 setClass("CATsurv",
          slots=list(

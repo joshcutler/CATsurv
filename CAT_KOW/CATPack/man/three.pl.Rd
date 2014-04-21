@@ -2,7 +2,7 @@
 \alias{three.pl}
 \title{Computerized Adaptive Testing Survey Probability Function}
 \usage{
-three.pl(cat, theta, difficulty, discrimination, guessing, D = 1)
+three.pl(cat, theta, difficulty, discrimination, guessing)
 }
 \arguments{
   \item{cat}{an object of \code{CATsurv} class.}
@@ -18,10 +18,6 @@ three.pl(cat, theta, difficulty, discrimination, guessing, D = 1)
 
   \item{guessing}{vector consisting of guessing parameter
   for each item .}
-
-  \item{D}{model parameter. 1 is for a logistic model and
-  1.702 for an approximation of the probit model. The
-  default value is 1.}
 }
 \value{
 A vector consisting of the probability of a correct

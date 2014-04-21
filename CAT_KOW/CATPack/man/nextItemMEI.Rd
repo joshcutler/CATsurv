@@ -1,0 +1,27 @@
+\name{nextItemMEI}
+\alias{nextItemMEI}
+\title{Computerized Adaptive Testing Survey Maximum Expected Information Criterion Function}
+\usage{
+nextItemMEI(cat, ...)
+}
+\arguments{
+  \item{cat}{an object of \code{CATsurv} class.}
+}
+\value{
+The next item to present to the respondent with the maximum
+expected information.
+}
+\description{
+This function determines the next item by comparing maximum
+expected information and choosing the largest and presents
+it to the respondent.
+}
+\author{
+Josh W. Cutler and Jacob M. Montgomery
+}
+\seealso{
+\code{\link{nextItem}},\code{\link{nextItemEPV}},
+\code{\link{nextItemKL}}, \code{\link{nextItemMFI}},
+\code{\link{nextItemMPWI}}, \code{\link{nextItemMWFI}}
+}
+

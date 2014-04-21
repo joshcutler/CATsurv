@@ -2,8 +2,7 @@
 \alias{expectedPV}
 \title{Computerized Adaptive Testing Survey Expected Posterior Variance Estimator}
 \usage{
-expectedPV(cat, item, theta.est, D = 1, lowerBound = -4, upperBound = 4,
-  quadPoints = 33)
+expectedPV(cat, item)
 }
 \arguments{
   \item{cat}{an object of class \code{CATsurv}}
@@ -13,24 +12,6 @@ expectedPV(cat, item, theta.est, D = 1, lowerBound = -4, upperBound = 4,
   latent trait estimate of theta.hat.  This should be the
   name of a row in the "questions" data-frame in the
   "questions" slot of a \code{CATsurv} object.}
-
-  \item{theta.est}{A scalar value containing an estimate of
-  a respondent's position on the latent trait.  Generally,
-  this is the output of the \code{\link{estimateTheta}}
-  funciton.}
-
-  \item{D}{A numeric value used as model parameter.  For
-  logit models, set D=1.  For an approximation of the
-  probit model, set D=1.702.  Defaults to D=1.}
-
-  \item{lowerBound}{The lower bound of the interval of the
-  latent trait used in estimation.  Defaults to -4.}
-
-  \item{upperBound}{The upper bound of the interval of the
-  latent trait used in estimation.  Defaults to 4.}
-
-  \item{quadPoints}{The number of points used in
-  approximating the integral.  Defaults to 33.}
 }
 \value{
 The expected posterior variance for respondent \emph{j} on
