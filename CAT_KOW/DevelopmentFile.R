@@ -22,3 +22,6 @@ install(pkg=current.code, local=TRUE)
 
 #see what things may be wrong...
 check(current.code)
+
+## Build a version of the package to share manually
+build(current.code, path=getwd())
