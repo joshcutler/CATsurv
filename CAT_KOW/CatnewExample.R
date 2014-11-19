@@ -284,8 +284,10 @@ nextItem(cat)
 
 # polytomous
 data(Environment)
-cat <- grmCAT(Environment)
+this
 nextItem(cat)
+
+summary(Environment)
 
 storeAnswer(cat,4,2)
 cat@answers

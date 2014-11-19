@@ -16,14 +16,19 @@ setGeneric("question.path", function(cat,ability.estimator="EAP",item.selection=
 
 #' @export 
 setMethod(f="question.path", signature=class.name, definition=function(cat,ability.estimator="EAP",item.selection="EPV"){
-  q <- nextItem(cat, ability.estimator, item.selection)$next.item
-  x <- c(0,1)
+  ability.estimator="EAP"
+  item.selection="EPV"
+  varNames <- names(cat@discrimination)
+  numPossibleAnswers <- rep(NA, length(varNames))
+  for(i in 1:length(varNames)){
+    numPossibleAnswers[i] <-  length(cat@difficulty[[i]])+1
+  }
   n <- length(cat@answers)
-  if(n<=5){
-    cat("the length of questions is less than 5.\ncalculate all possible question paths up to",length(cat@answers)-1,"stage.\n")
+  if(n<=10){
+    cat("the length of questions is less than 10.\ncalculate all possible question paths up to",length(cat@answers)-1,"stage.\n")
     arg <- list(NULL)
      for(i in 1:(n-1)){
-      arg[[i]] <- x
+      arg[[i]] <- seq(0, length(cat@discrimination[i]))
       }
     possible.paths <- expand.grid(arg)
     ord <- order(possible.paths[,1],possible.paths[,ifelse(n<3,1,2)],possible.paths[,ifelse(n<4,1,3)],possible.paths[,ifelse(n<5,1,4)])
@@ -32,7 +37,7 @@ setMethod(f="question.path", signature=class.name, definition=function(cat,abili
           ord <- order(possible.paths[,1],possible.paths[,2],possible.paths[,3],possible.paths[,4],possible.paths[,5])
           possible.paths <- possible.paths[ord,]  
   }
-    
+
   answer <- NA
   names(answer) <- "NA"
   outcome <- list(NULL)
