@@ -17,10 +17,11 @@ setGeneric("nextItem", function(cat,ability.estimator="EAP", item.selection="EPV
 #' @export
 setMethod(f="nextItem", signature=class.name, definition=function(cat,ability.estimator="EAP", item.selection="EPV") {
   available_questions = data.frame(questions=which(is.na(cat@answers)),a=NA)
-  
+
   cat@Theta.est <- switch(ability.estimator,EAP=estimateTheta(cat),ML=estimateThetaML(cat),MAP=estimateThetaMAP(cat))
   
-  to.return <- switch(item.selection, EPV=nextItemEPV(cat), KL=nextItemKL(cat), MFI=nextItemMFI(cat),MPWI=nextItemMPWI(cat), MWFI=nextItemMWFI(cat), MEI=nextItemMEI(cat)) 
+  to.return <- switch(item.selection, EPV=nextItemEPV(cat), KL=nextItemKL(cat), MFI=nextItemMFI(cat),MPWI=nextItemMPWI(cat), MWFI=nextItemMWFI(cat), MEI=nextItemMEI(cat))
+
   return(to.return)
 })
 

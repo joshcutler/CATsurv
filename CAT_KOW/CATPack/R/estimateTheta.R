@@ -18,14 +18,15 @@ setGeneric("estimateTheta", function(cat, ...){standardGeneric("estimateTheta")}
 #' @export
 setMethod(f="estimateTheta", signature=class.name, definition=function(cat,...) {
   applicable_rows = which(!is.na(cat@answers))
-  
+
   prior.values = prior(cat, cat@X, cat@priorName, cat@priorParams)
   likelihood.values = rep(NA, times=length(cat@X))
   
   for (i in 1:length(likelihood.values)) {
     likelihood.values[i] = likelihood(cat, cat@X[i], applicable_rows)
   }
-  
   results = integrate.xy(cat@X, cat@X*likelihood.values*prior.values) / integrate.xy(cat@X, likelihood.values*prior.values)
+
+  
   return(results)
 })

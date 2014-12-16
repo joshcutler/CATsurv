@@ -26,14 +26,15 @@ setGeneric("grmCAT", function(data, object=NULL, ...){standardGeneric("grmCAT")}
 setMethod(f="grmCAT", signature="data.frame", 
           definition=function(data, object,...){
             if(!is.null(object)) if(class(object)!="CATsurv") stop("object is not class CATsurv")            
-            fit <- grm(data=data,...)
+            fit <- grm(data=data, IRT.param = TRUE,...)
             coefficient <- coef(fit)
             answer <- rep(NA,nrow(coefficient))
             discrimination <- coefficient[,"Dscrmn"]
             difficulty <- lapply(1:nrow(coefficient), function(i) coefficient[i,-ncol(coefficient)])
             names(difficulty) <- rownames(coefficient)
+            guessing <- rep(0, length(discrimination))
             if(is.null(object)){
-              return(new("CATsurv", discrimination=discrimination, difficulty=difficulty, poly=TRUE, guessing=0, answers=answer))
+              return(new("CATsurv", discrimination=discrimination, difficulty=difficulty, poly=TRUE, guessing=guessing, answers=answer))
             } else {
               object@discrimination <- discrimination
               object@difficulty <- difficulty

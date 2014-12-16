@@ -19,9 +19,11 @@
 setGeneric("three.pl", function(cat, theta, difficulty, discrimination, guessing){standardGeneric("three.pl")})
 
 #' @export 
-setMethod(f="three.pl", signature="CATsurv", definition=function(cat, theta, difficulty, discrimination, guessing) {
-if(cat@poly){ prob=1/(1+exp(-discrimination*theta+difficulty)) 
-   } else {
-    exp.portion = exp(cat@D*discrimination*(theta - difficulty))
-  prob = guessing + (1 - guessing)*(exp.portion / (1 + exp.portion))}
-})
+setMethod(f="three.pl", signature="CATsurv",
+          definition=function(cat, theta, difficulty, discrimination, guessing) {
+            exp.portion = exp(cat@D*discrimination*(theta - difficulty))
+            prob = guessing + (1 - guessing)*(exp.portion / (1 + exp.portion))
+            return(prob)
+          }
+          )
+

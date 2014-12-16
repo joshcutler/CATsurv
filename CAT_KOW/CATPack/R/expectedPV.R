@@ -16,24 +16,30 @@ setGeneric("expectedPV", function(cat, item){standardGeneric("expectedPV")})
 #' @export
 setMethod(f="expectedPV", signature=class.name, definition=function(cat, item) {
   if (cat@poly) {
+#    browser()    
     row.name = item
-    thetas = rep(NA, length(cat@difficulty[row.name]) + 1)
-    variances = rep(NA, length(cat@difficulty[row.name]) + 1)
-    
+    thetas = rep(NA, length(cat@difficulty[[row.name]]) + 1)
+    variances = rep(NA, length(cat@difficulty[[row.name]]) + 1)
+
+
     for (i in 1:(length(cat@difficulty[[row.name]])+1)) {
       cat@answers[row.name] = i
       thetas[i] = estimateTheta(cat)
       variances[i] = estimateSE(cat, thetas[i])^2
     }
     cat@answers[row.name] = NA
-    
-    this.question.cdf = three.pl(cat, cat@Theta.est, cat@difficulty[[row.name]], cat@discrimination[row.name], cat@guessing[row.name])
+
+
+
+    cat@Theta.est = estimateTheta(cat) ## Could comment this out
+    this.question.cdf =  three.pl(cat, cat@Theta.est, cat@difficulty[[row.name]], cat@discrimination[row.name], cat@guessing[row.name])
     this.question.cdf = c(1, this.question.cdf, 0)
-    this.question.pdf = c()
+    this.question.cdf
+    this.question.pdf = rep(NA, length(this.question.cdf)-1)
     for (i in 2:(length(this.question.cdf))) {
-      this.question.pdf[i-1] = this.question.cdf[i-1] - this.question.cdf[i]
+      this.question.pdf[i-1] <- this.question.cdf[i-1] - this.question.cdf[i]
     }
-    
+
     return (sum(variances * this.question.pdf))
   } else {
     prob.correct = three.pl(cat, cat@Theta.est, cat@difficulty[item], cat@discrimination[item], cat@guessing[item])

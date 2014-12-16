@@ -20,6 +20,7 @@ setGeneric("likelihood", function(cat, theta, items){standardGeneric("likelihood
 #' @export
 setMethod(f="likelihood", signature=class.name, definition=function(cat, theta, items) {
   if (cat@poly) {
+#    browser()
     probabilities = c()
     L = 1
     for (question in items) {
@@ -28,8 +29,7 @@ setMethod(f="likelihood", signature=class.name, definition=function(cat, theta, 
       this.question.pdf = c()
       for (i in 2:(length(this.question.cdf))) {
         this.question.pdf[i-1] = this.question.cdf[i-1] - this.question.cdf[i]
-      }
-      
+      }    
       L = L * this.question.pdf[cat@answers[question]]
     }
   } else {
