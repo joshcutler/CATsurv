@@ -17,16 +17,13 @@ setGeneric("nextItemEPV", function(cat,...){standardGeneric("nextItemEPV")})
 
 
 setMethod(f="nextItemEPV", signature=class.name, definition=function(cat, available_questions) {
-
-
   available_questions = data.frame(questions=which(is.na(cat@answers)),EPV=NA)
 
+  ## A workaround to allow for refusals.
+  cat@answers[which(cat@answers==-1)]<-NA
   for (i in 1:nrow(available_questions)) {
     available_questions[i,]$EPV = expectedPV(cat, available_questions[i,]$questions)
   }
-
-
-  
   next.item = available_questions[available_questions$EPV == min(available_questions$EPV, na.rm=TRUE),1]
   to.return = list(all.estimates=available_questions, next.item=next.item)
   
